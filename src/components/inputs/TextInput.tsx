@@ -3,6 +3,7 @@ import React, { FC, InputHTMLAttributes } from "react";
 interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   register: any;
+  errorMessage?: any;
 }
 
 const TextInput: FC<TextInputProps> = ({
@@ -11,6 +12,7 @@ const TextInput: FC<TextInputProps> = ({
   id,
   name,
   register,
+  errorMessage,
   ...rest
 }) => {
   return (
@@ -24,6 +26,7 @@ const TextInput: FC<TextInputProps> = ({
         {...rest}
         {...register(name)}
       />
+      <p className="text-red-600">{errorMessage}</p>
     </div>
   );
 };

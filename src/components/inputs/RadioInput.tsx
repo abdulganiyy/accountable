@@ -2,11 +2,15 @@ import React, { FC, InputHTMLAttributes } from "react";
 
 interface RadioInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
+  smallLabel?: string;
+  bigLabel?: string;
   register?: any;
 }
 
 const RadioInput: FC<RadioInputProps> = ({
   label,
+  smallLabel,
+  bigLabel,
   placeholder,
   id,
   name,
@@ -27,7 +31,10 @@ const RadioInput: FC<RadioInputProps> = ({
         {...register(name)}
       />
       <span className="w-3 h-3 border-[.5px] border-[#00085A] rounded-full peer-checked:border-[3px] shadow-sm"></span>
-      <span>{label}</span>
+      <span>
+        {label || bigLabel}
+        {smallLabel && <span className="text-[#555555]">{smallLabel}</span>}
+      </span>
     </label>
   );
 };
