@@ -6,9 +6,11 @@ interface HeaderProps {}
 
 const Header: FC<HeaderProps> = () => {
   return (
-    <div className="flex justify-between items-center h-16 px-4 md:px-[148px]">
+    <div className="flex justify-between items-center h-16 px-4 md:px-[148px] border-b-[1px] border-[#EAEDEF]">
       <div>
-        <Image src="/logo.svg" alt="Logo" width={150} height={20} />
+        <Link href="/">
+          <Image src="/logo.svg" alt="Logo" width={150} height={20} />
+        </Link>
       </div>
       <div className="text-[#555555] font-semibold text-sm">
         Have an account?{" "}

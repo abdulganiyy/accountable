@@ -3,6 +3,7 @@ import React, { FC, InputHTMLAttributes } from "react";
 interface EmailInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   register?: any;
+  errorMessage?: any;
 }
 
 const EmailInput: FC<EmailInputProps> = ({
@@ -11,6 +12,7 @@ const EmailInput: FC<EmailInputProps> = ({
   id,
   name,
   register,
+  errorMessage,
   ...rest
 }) => {
   return (
@@ -24,6 +26,7 @@ const EmailInput: FC<EmailInputProps> = ({
         {...rest}
         {...register(name)}
       />
+      <p className="text-red-600">{errorMessage}</p>
     </div>
   );
 };

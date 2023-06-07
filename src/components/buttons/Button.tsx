@@ -1,16 +1,27 @@
 import React, { FC, ButtonHTMLAttributes } from "react";
+import { ClipLoader } from "react-spinners";
+import { twMerge } from "tailwind-merge";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: string;
+  isLoading?: boolean;
 }
 
-const Button: FC<ButtonProps> = ({ children, ...rest }) => {
+const Button: FC<ButtonProps> = ({
+  children,
+  isLoading,
+  className: cls,
+  ...rest
+}) => {
   return (
     <button
-      className="h-[48px] w-full rounded-md flex items-center justify-center bg-[#071A7E] text-white"
+      className={twMerge(
+        "h-[48px] w-full rounded-md flex items-center justify-center bg-[#071A7E] text-white disabled:opacity-50",
+        cls
+      )}
       {...rest}
     >
-      {children}
+      {isLoading ? <ClipLoader color="#FF8C4B" /> : children}
     </button>
   );
 };
