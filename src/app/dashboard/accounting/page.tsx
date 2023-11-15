@@ -205,294 +205,295 @@ const Statements = ({
         </TabButton>
       </div>
       {activeStatement === "overview" && (
-        <div>
-          <div className="mt-6">
-            <div className="bg-white border-[1px] border-[#E6E6E6] rounded-2xl">
-              <div className="h-[52px] flex justify-between items-center px-6 border-b-[1px] border-[#EAEDEF]">
-                <span>Financial Overview</span>
-              </div>
-              <div className="p-6 grid grid-cols-4 gap-x-6">
-                <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
-                  <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
-                    <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
-                      <PokerChip size={20} />
-                    </span>
-                    <span className="font-medium text-[14px] leading-[20px] text-[#4C5259] flex items-center gap-x-1">
-                      Assets <Info />
-                    </span>
-                    <span className="font-semibold text-[24px] leading-[35px] text-[#021645]">
-                      {/* ₦150,000.00 */}
-                      {"₦ XXX"}
-                    </span>
-                    <span
-                      onClick={() => {
-                        setMore("assets");
-                      }}
-                      className="cursor-pointer text-[12px] leading-[17px] text-[#00085A] flex items-center gap-x-1 py-3 border-t-[1px] border-[#E6E6E6]"
-                    >
-                      <span>View more details</span>
-                      <ArrowRight size={16} />
-                    </span>
-                  </div>
-                </div>
-                <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
-                  <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
-                    <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
-                      <Coins size={20} />
-                    </span>
-                    <span className="font-medium text-[14px] leading-[20px] text-[#4C5259] flex items-center gap-x-1">
-                      Revenue <Info />
-                    </span>
-                    <span className="font-semibold text-[24px] leading-[35px] text-[#021645]">
-                      {/* ₦150,000.00 */}
-                      {"₦ XXX"}
-                    </span>
-                    <span
-                      onClick={() => {
-                        setMore("revenue");
-                      }}
-                      className="cursor-pointer text-[12px] leading-[17px] text-[#00085A] flex items-center gap-x-1 py-3 border-t-[1px] border-[#E6E6E6]"
-                    >
-                      <span>View more details</span>
-                      <ArrowRight size={16} />
-                    </span>
-                  </div>
-                </div>
-                <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
-                  <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
-                    <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
-                      <Money size={20} />
-                    </span>
-                    <span className="font-medium text-[14px] leading-[20px] text-[#4C5259] flex items-center gap-x-1">
-                      Expenditure <Info />
-                    </span>
-                    <span className="font-semibold text-[24px] leading-[35px] text-[#021645]">
-                      {/* ₦150,000.00 */}
-                      {"₦ XXX"}
-                    </span>
-                    <span
-                      onClick={() => {
-                        setMore("expenditure");
-                      }}
-                      className="cursor-pointer text-[12px] leading-[17px] text-[#00085A] flex items-center gap-x-1 py-3 border-t-[1px] border-[#E6E6E6]"
-                    >
-                      <span>View more details</span>
-                      <ArrowRight size={16} />
-                    </span>
-                  </div>
-                </div>
-                <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
-                  <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
-                    <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
-                      <Rocket size={20} />
-                    </span>
-                    <span className="font-medium text-[14px] leading-[20px] text-[#4C5259] flex items-center gap-x-1">
-                      Runway Duration <Info />
-                    </span>
-                    <span className="font-semibold text-[24px] leading-[35px] text-[#021645]">
-                      {/* 10 months */}
-                      {"XXX"}
-                    </span>
-                    <span
-                      onClick={() => {
-                        setMore("runway duration");
-                      }}
-                      className="cursor-pointer text-[12px] leading-[17px] text-[#00085A] flex items-center gap-x-1 py-3 border-t-[1px] border-[#E6E6E6]"
-                    >
-                      <span>View more details</span>
-                      <ArrowRight size={16} />
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* Charts */}
-            <div className="bg-white border-[1px] border-[#E6E6E6] rounded-2xl mt-6">
-              <div className="h-[52px] flex justify-between items-center px-6 border-b-[1px] border-[#EAEDEF]">
-                <span>Charts</span>
-              </div>
-              <div className="px-5 py-6 grid grid-cols-[1fr,202px] gap-x-3">
-                <div>
-                  {chartType === "line" ? (
-                    <div className="bg-[#F8F9FE] rounded-[16px] p-3">
-                      <div className="flex justify-between items-center mb-4">
-                        <div>
-                          <p>Assets & Liabilities</p>
-                          <p className="flex items-center gap-x-2">
-                            <span className="flex items-center gap-x-1">
-                              <span className="h-[8px] w-[8px] rounded-full bg-[#F79009]"></span>
-                              <span>Liabilities</span>
-                            </span>
-                            <span className="flex items-center gap-x-1">
-                              <span className="h-[8px] w-[8px] rounded-full bg-[#A8C5DA]"></span>
-                              <span>Assets</span>
-                            </span>
-                          </p>
-                        </div>
-                        <span
-                          onClick={() => {}}
-                          className="text-[12px] leading-[17px] text-[#00085A] flex items-center gap-x-1"
-                        >
-                          <span className="underline">View more details</span>
-                          <ArrowRight size={16} />
-                        </span>
-                      </div>
-                      <ResponsiveContainer width={"100%"} height={229}>
-                        <LineChart data={lineData}>
-                          <CartesianGrid vertical={false} />
-                          <Line
-                            type="monotone"
-                            dataKey="assets"
-                            stroke="#A8C5DA"
-                          />
-                          <Line
-                            type="monotone"
-                            dataKey="liabilities"
-                            stroke="#F79009"
-                          />
+        <></>
+        // <div>
+        //   <div className="mt-6">
+        //     <div className="bg-white border-[1px] border-[#E6E6E6] rounded-2xl">
+        //       <div className="h-[52px] flex justify-between items-center px-6 border-b-[1px] border-[#EAEDEF]">
+        //         <span>Financial Overview</span>
+        //       </div>
+        //       <div className="p-6 grid grid-cols-4 gap-x-6">
+        //         <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
+        //           <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
+        //             <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
+        //               <PokerChip size={20} />
+        //             </span>
+        //             <span className="font-medium text-[14px] leading-[20px] text-[#4C5259] flex items-center gap-x-1">
+        //               Assets <Info />
+        //             </span>
+        //             <span className="font-semibold text-[24px] leading-[35px] text-[#021645]">
+        //
+        //               {"₦ XXX"}
+        //             </span>
+        //             <span
+        //               onClick={() => {
+        //                 setMore("assets");
+        //               }}
+        //               className="cursor-pointer text-[12px] leading-[17px] text-[#00085A] flex items-center gap-x-1 py-3 border-t-[1px] border-[#E6E6E6]"
+        //             >
+        //               <span>View more details</span>
+        //               <ArrowRight size={16} />
+        //             </span>
+        //           </div>
+        //         </div>
+        //         <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
+        //           <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
+        //             <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
+        //               <Coins size={20} />
+        //             </span>
+        //             <span className="font-medium text-[14px] leading-[20px] text-[#4C5259] flex items-center gap-x-1">
+        //               Revenue <Info />
+        //             </span>
+        //             <span className="font-semibold text-[24px] leading-[35px] text-[#021645]">
+        //
+        //               {"₦ XXX"}
+        //             </span>
+        //             <span
+        //               onClick={() => {
+        //                 setMore("revenue");
+        //               }}
+        //               className="cursor-pointer text-[12px] leading-[17px] text-[#00085A] flex items-center gap-x-1 py-3 border-t-[1px] border-[#E6E6E6]"
+        //             >
+        //               <span>View more details</span>
+        //               <ArrowRight size={16} />
+        //             </span>
+        //           </div>
+        //         </div>
+        //         <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
+        //           <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
+        //             <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
+        //               <Money size={20} />
+        //             </span>
+        //             <span className="font-medium text-[14px] leading-[20px] text-[#4C5259] flex items-center gap-x-1">
+        //               Expenditure <Info />
+        //             </span>
+        //             <span className="font-semibold text-[24px] leading-[35px] text-[#021645]">
+        //
+        //               {"₦ XXX"}
+        //             </span>
+        //             <span
+        //               onClick={() => {
+        //                 setMore("expenditure");
+        //               }}
+        //               className="cursor-pointer text-[12px] leading-[17px] text-[#00085A] flex items-center gap-x-1 py-3 border-t-[1px] border-[#E6E6E6]"
+        //             >
+        //               <span>View more details</span>
+        //               <ArrowRight size={16} />
+        //             </span>
+        //           </div>
+        //         </div>
+        //         <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
+        //           <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
+        //             <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
+        //               <Rocket size={20} />
+        //             </span>
+        //             <span className="font-medium text-[14px] leading-[20px] text-[#4C5259] flex items-center gap-x-1">
+        //               Runway Duration <Info />
+        //             </span>
+        //             <span className="font-semibold text-[24px] leading-[35px] text-[#021645]">
+        //               {/* 10 months */}
+        //               {"XXX"}
+        //             </span>
+        //             <span
+        //               onClick={() => {
+        //                 setMore("runway duration");
+        //               }}
+        //               className="cursor-pointer text-[12px] leading-[17px] text-[#00085A] flex items-center gap-x-1 py-3 border-t-[1px] border-[#E6E6E6]"
+        //             >
+        //               <span>View more details</span>
+        //               <ArrowRight size={16} />
+        //             </span>
+        //           </div>
+        //         </div>
+        //       </div>
+        //     </div>
+        //     {/* Charts */}
+        //     <div className="bg-white border-[1px] border-[#E6E6E6] rounded-2xl mt-6">
+        //       <div className="h-[52px] flex justify-between items-center px-6 border-b-[1px] border-[#EAEDEF]">
+        //         <span>Charts</span>
+        //       </div>
+        //       <div className="px-5 py-6 grid grid-cols-[1fr,202px] gap-x-3">
+        //         <div>
+        //           {chartType === "line" ? (
+        //             <div className="bg-[#F8F9FE] rounded-[16px] p-3">
+        //               <div className="flex justify-between items-center mb-4">
+        //                 <div>
+        //                   <p>Assets & Liabilities</p>
+        //                   <p className="flex items-center gap-x-2">
+        //                     <span className="flex items-center gap-x-1">
+        //                       <span className="h-[8px] w-[8px] rounded-full bg-[#F79009]"></span>
+        //                       <span>Liabilities</span>
+        //                     </span>
+        //                     <span className="flex items-center gap-x-1">
+        //                       <span className="h-[8px] w-[8px] rounded-full bg-[#A8C5DA]"></span>
+        //                       <span>Assets</span>
+        //                     </span>
+        //                   </p>
+        //                 </div>
+        //                 <span
+        //                   onClick={() => {}}
+        //                   className="text-[12px] leading-[17px] text-[#00085A] flex items-center gap-x-1"
+        //                 >
+        //                   <span className="underline">View more details</span>
+        //                   <ArrowRight size={16} />
+        //                 </span>
+        //               </div>
+        //               <ResponsiveContainer width={"100%"} height={229}>
+        //                 <LineChart data={lineData}>
+        //                   <CartesianGrid vertical={false} />
+        //                   <Line
+        //                     type="monotone"
+        //                     dataKey="assets"
+        //                     stroke="#A8C5DA"
+        //                   />
+        //                   <Line
+        //                     type="monotone"
+        //                     dataKey="liabilities"
+        //                     stroke="#F79009"
+        //                   />
 
-                          <YAxis
-                            stroke="#1C1C1C66"
-                            axisLine={false}
-                            tickLine={false}
-                            unit={"M"}
-                          />
-                          <XAxis
-                            dataKey="name"
-                            stroke="#1C1C1C66"
-                            tickLine={false}
-                          />
-                          <Tooltip />
-                        </LineChart>
-                      </ResponsiveContainer>
-                    </div>
-                  ) : (
-                    <div className="bg-[#F8F9FE] rounded-[16px] p-3">
-                      <div className="flex justify-between items-center mb-4">
-                        <div>
-                          <p>Assets & Liabilities</p>
-                          <p className="flex items-center gap-x-2">
-                            <span className="flex items-center gap-x-1">
-                              <span className="h-[8px] w-[8px] rounded-full bg-[#F79009]"></span>
-                              <span>Liabilities</span>
-                            </span>
-                            <span className="flex items-center gap-x-1">
-                              <span className="h-[8px] w-[8px] rounded-full bg-[#A8C5DA]"></span>
-                              <span>Assets</span>
-                            </span>
-                          </p>
-                        </div>
-                        <span
-                          onClick={() => {}}
-                          className="text-[12px] leading-[17px] text-[#00085A] flex items-center gap-x-1"
-                        >
-                          <span className="underline">View more details</span>
-                          <ArrowRight size={16} />
-                        </span>
-                      </div>
-                      <ResponsiveContainer width={"100%"} height={229}>
-                        <BarChart data={lineData}>
-                          <CartesianGrid vertical={false} />
+        //                   <YAxis
+        //                     stroke="#1C1C1C66"
+        //                     axisLine={false}
+        //                     tickLine={false}
+        //                     unit={"M"}
+        //                   />
+        //                   <XAxis
+        //                     dataKey="name"
+        //                     stroke="#1C1C1C66"
+        //                     tickLine={false}
+        //                   />
+        //                   <Tooltip />
+        //                 </LineChart>
+        //               </ResponsiveContainer>
+        //             </div>
+        //           ) : (
+        //             <div className="bg-[#F8F9FE] rounded-[16px] p-3">
+        //               <div className="flex justify-between items-center mb-4">
+        //                 <div>
+        //                   <p>Assets & Liabilities</p>
+        //                   <p className="flex items-center gap-x-2">
+        //                     <span className="flex items-center gap-x-1">
+        //                       <span className="h-[8px] w-[8px] rounded-full bg-[#F79009]"></span>
+        //                       <span>Liabilities</span>
+        //                     </span>
+        //                     <span className="flex items-center gap-x-1">
+        //                       <span className="h-[8px] w-[8px] rounded-full bg-[#A8C5DA]"></span>
+        //                       <span>Assets</span>
+        //                     </span>
+        //                   </p>
+        //                 </div>
+        //                 <span
+        //                   onClick={() => {}}
+        //                   className="text-[12px] leading-[17px] text-[#00085A] flex items-center gap-x-1"
+        //                 >
+        //                   <span className="underline">View more details</span>
+        //                   <ArrowRight size={16} />
+        //                 </span>
+        //               </div>
+        //               <ResponsiveContainer width={"100%"} height={229}>
+        //                 <BarChart data={lineData}>
+        //                   <CartesianGrid vertical={false} />
 
-                          <Bar dataKey="assets" fill="#A8C5DA" />
-                          <Bar dataKey="liabilities" fill="#F79009" />
+        //                   <Bar dataKey="assets" fill="#A8C5DA" />
+        //                   <Bar dataKey="liabilities" fill="#F79009" />
 
-                          <YAxis
-                            stroke="#1C1C1C66"
-                            axisLine={false}
-                            tickLine={false}
-                            unit={"M"}
-                          />
-                          <XAxis
-                            dataKey="name"
-                            stroke="#1C1C1C66"
-                            tickLine={false}
-                          />
-                          <Tooltip />
-                        </BarChart>
-                      </ResponsiveContainer>
-                    </div>
-                  )}
-                  <div className="flex gap-x-[10px] pt-5 justify-center items-center">
-                    <label
-                      htmlFor="line"
-                      className="flex gap-x-[10px] items-center cursor-pointer"
-                    >
-                      <input
-                        type="radio"
-                        name="chartType"
-                        value="line"
-                        id="line"
-                        onChange={(e) => {
-                          setChartType(e.target.value);
-                        }}
-                        checked={chartType === "line"}
-                        className="hidden peer w-3 h-3 border-[.5px] border-[#00085A] bg-white checked:bg-[#00085A] checked:border-[3px]"
-                      />
-                      <span className="w-3 h-3 border-[.5px] border-[#00085A] rounded-full peer-checked:border-[3px] shadow-sm inline-block"></span>
-                      {/* <span>2345 **** **** 345</span> */}
-                    </label>
-                    <label
-                      htmlFor="bar"
-                      className="cursor-pointer flex gap-x-[10px] items-center"
-                    >
-                      <input
-                        type="radio"
-                        name="chartType"
-                        id="bar"
-                        value="bar"
-                        onChange={(e) => {
-                          setChartType(e.target.value);
-                        }}
-                        checked={chartType === "bar"}
-                        className="hidden peer w-3 h-3 border-[.5px] border-[#00085A] bg-white checked:bg-[#00085A] checked:border-[3px]"
-                      />
-                      <span className="w-3 h-3 border-[.5px] border-[#00085A] rounded-full peer-checked:border-[3px] shadow-sm inline-block"></span>
-                      {/* <span>2345 **** **** 345</span> */}
-                    </label>
-                  </div>
-                </div>
+        //                   <YAxis
+        //                     stroke="#1C1C1C66"
+        //                     axisLine={false}
+        //                     tickLine={false}
+        //                     unit={"M"}
+        //                   />
+        //                   <XAxis
+        //                     dataKey="name"
+        //                     stroke="#1C1C1C66"
+        //                     tickLine={false}
+        //                   />
+        //                   <Tooltip />
+        //                 </BarChart>
+        //               </ResponsiveContainer>
+        //             </div>
+        //           )}
+        //           <div className="flex gap-x-[10px] pt-5 justify-center items-center">
+        //             <label
+        //               htmlFor="line"
+        //               className="flex gap-x-[10px] items-center cursor-pointer"
+        //             >
+        //               <input
+        //                 type="radio"
+        //                 name="chartType"
+        //                 value="line"
+        //                 id="line"
+        //                 onChange={(e) => {
+        //                   setChartType(e.target.value);
+        //                 }}
+        //                 checked={chartType === "line"}
+        //                 className="hidden peer w-3 h-3 border-[.5px] border-[#00085A] bg-white checked:bg-[#00085A] checked:border-[3px]"
+        //               />
+        //               <span className="w-3 h-3 border-[.5px] border-[#00085A] rounded-full peer-checked:border-[3px] shadow-sm inline-block"></span>
+        //               {/* <span>2345 **** **** 345</span> */}
+        //             </label>
+        //             <label
+        //               htmlFor="bar"
+        //               className="cursor-pointer flex gap-x-[10px] items-center"
+        //             >
+        //               <input
+        //                 type="radio"
+        //                 name="chartType"
+        //                 id="bar"
+        //                 value="bar"
+        //                 onChange={(e) => {
+        //                   setChartType(e.target.value);
+        //                 }}
+        //                 checked={chartType === "bar"}
+        //                 className="hidden peer w-3 h-3 border-[.5px] border-[#00085A] bg-white checked:bg-[#00085A] checked:border-[3px]"
+        //               />
+        //               <span className="w-3 h-3 border-[.5px] border-[#00085A] rounded-full peer-checked:border-[3px] shadow-sm inline-block"></span>
+        //               {/* <span>2345 **** **** 345</span> */}
+        //             </label>
+        //           </div>
+        //         </div>
 
-                <div className="bg-[#F8F9FE] rounded-[16px] p-6">
-                  <div>Ratios</div>
-                  <Doughnut data={doughData} />
-                  <div className="mt-4 flex flex-col gap-y-2">
-                    <Percentile
-                      title="ROE"
-                      color="bg-[#94A3FA]"
-                      percentage="w-[50%]"
-                      number="50"
-                    />
-                    <Percentile
-                      title="Current Ratio"
-                      color="bg-[#94A3FA]"
-                      percentage="w-[50%]"
-                      number="50"
-                    />
-                    <Percentile
-                      title="Quick Ratio"
-                      color="bg-[#94A3FA]"
-                      percentage="w-[50%]"
-                      number="50"
-                    />
-                    <Percentile
-                      title="Ratio"
-                      color="bg-[#94A3FA]"
-                      percentage="w-[50%]"
-                      number="50"
-                    />
-                    <Percentile
-                      title="ROA"
-                      color="bg-[#94A3FA]"
-                      percentage="w-[50%]"
-                      number="50"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        //         <div className="bg-[#F8F9FE] rounded-[16px] p-6">
+        //           <div>Ratios</div>
+        //           <Doughnut data={doughData} />
+        //           <div className="mt-4 flex flex-col gap-y-2">
+        //             <Percentile
+        //               title="ROE"
+        //               color="bg-[#94A3FA]"
+        //               percentage="w-[50%]"
+        //               number="50"
+        //             />
+        //             <Percentile
+        //               title="Current Ratio"
+        //               color="bg-[#94A3FA]"
+        //               percentage="w-[50%]"
+        //               number="50"
+        //             />
+        //             <Percentile
+        //               title="Quick Ratio"
+        //               color="bg-[#94A3FA]"
+        //               percentage="w-[50%]"
+        //               number="50"
+        //             />
+        //             <Percentile
+        //               title="Ratio"
+        //               color="bg-[#94A3FA]"
+        //               percentage="w-[50%]"
+        //               number="50"
+        //             />
+        //             <Percentile
+        //               title="ROA"
+        //               color="bg-[#94A3FA]"
+        //               percentage="w-[50%]"
+        //               number="50"
+        //             />
+        //           </div>
+        //         </div>
+        //       </div>
+        //     </div>
+        //   </div>
+        // </div>
       )}
       {activeStatement === "Profit or Loss" && (
         <div>
@@ -515,50 +516,7 @@ const Statements = ({
                   </button>
                 </div>
               </div>
-              <div className="p-6 grid grid-cols-3 gap-x-6">
-                <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
-                  <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
-                    <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
-                      <Coins size={20} />
-                    </span>
-                    <span className="font-medium text-[14px] leading-[20px] text-[#4C5259] flex items-center gap-x-1">
-                      Revenue <Info />
-                    </span>
-                    <span className="font-semibold text-[24px] leading-[35px] text-[#021645]">
-                      {/* ₦150,000.00 */}
-                      {"₦ XXX"}
-                    </span>
-                  </div>
-                </div>
-                <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
-                  <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
-                    <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
-                      <ArrowDown size={20} />
-                    </span>
-                    <span className="font-medium text-[14px] leading-[20px] text-[#4C5259] flex items-center gap-x-1">
-                      Net Income <Info />
-                    </span>
-                    <span className="font-semibold text-[24px] leading-[35px] text-[#021645]">
-                      {/* ₦70,000.01 */}
-                      {"₦ XXX"}
-                    </span>
-                  </div>
-                </div>
-                <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
-                  <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
-                    <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
-                      <Money size={20} />
-                    </span>
-                    <span className="font-medium text-[14px] leading-[20px] text-[#4C5259] flex items-center gap-x-1">
-                      Expenses <Info />
-                    </span>
-                    <span className="font-semibold text-[24px] leading-[35px] text-[#021645]">
-                      {/* ₦50,000.00 */}
-                      {"₦ XXX"}
-                    </span>
-                  </div>
-                </div>
-              </div>
+              {/* commented the chart and moved it to the bottom */}
               <div className="p-6">
                 <table className="w-full">
                   {statements?.SPL?.items?.map((item: any, i: number) => {
@@ -751,50 +709,7 @@ const Statements = ({
                   </button>
                 </div>
               </div>
-              <div className="p-6 grid grid-cols-3 gap-x-6">
-                <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
-                  <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
-                    <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
-                      <Coins size={20} />
-                    </span>
-                    <span className="font-medium text-[14px] leading-[20px] text-[#4C5259] flex items-center gap-x-1">
-                      Revenue <Info />
-                    </span>
-                    <span className="font-semibold text-[24px] leading-[35px] text-[#021645]">
-                      {/* ₦150,000.00 */}
-                      {"₦ XXX"}
-                    </span>
-                  </div>
-                </div>
-                <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
-                  <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
-                    <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
-                      <ArrowDown size={20} />
-                    </span>
-                    <span className="font-medium text-[14px] leading-[20px] text-[#4C5259] flex items-center gap-x-1">
-                      Net Income <Info />
-                    </span>
-                    <span className="font-semibold text-[24px] leading-[35px] text-[#021645]">
-                      {/* ₦70,000.01 */}
-                      {"₦ XXX"}
-                    </span>
-                  </div>
-                </div>
-                <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
-                  <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
-                    <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
-                      <Money size={20} />
-                    </span>
-                    <span className="font-medium text-[14px] leading-[20px] text-[#4C5259] flex items-center gap-x-1">
-                      Expenses <Info />
-                    </span>
-                    <span className="font-semibold text-[24px] leading-[35px] text-[#021645]">
-                      {/* ₦50,000.00 */}
-                      {"₦ XXX"}
-                    </span>
-                  </div>
-                </div>
-              </div>
+              {/* commented the chart and moved to the bottom */}
               <div className="p-6">
                 <table className="w-full">
                   {statements?.SFP?.items?.map((item: any, i: number) => {
@@ -987,50 +902,7 @@ const Statements = ({
                   </button>
                 </div>
               </div>
-              <div className="p-6 grid grid-cols-3 gap-x-6">
-                <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
-                  <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
-                    <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
-                      <Coins size={20} />
-                    </span>
-                    <span className="font-medium text-[14px] leading-[20px] text-[#4C5259] flex items-center gap-x-1">
-                      Revenue <Info />
-                    </span>
-                    <span className="font-semibold text-[24px] leading-[35px] text-[#021645]">
-                      {/* ₦150,000.00 */}
-                      {"₦ XXX"}
-                    </span>
-                  </div>
-                </div>
-                <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
-                  <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
-                    <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
-                      <ArrowDown size={20} />
-                    </span>
-                    <span className="font-medium text-[14px] leading-[20px] text-[#4C5259] flex items-center gap-x-1">
-                      Net Income <Info />
-                    </span>
-                    <span className="font-semibold text-[24px] leading-[35px] text-[#021645]">
-                      {/* ₦70,000.01 */}
-                      {"₦ XXX"}
-                    </span>
-                  </div>
-                </div>
-                <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
-                  <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
-                    <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
-                      <Money size={20} />
-                    </span>
-                    <span className="font-medium text-[14px] leading-[20px] text-[#4C5259] flex items-center gap-x-1">
-                      Expenses <Info />
-                    </span>
-                    <span className="font-semibold text-[24px] leading-[35px] text-[#021645]">
-                      {/* ₦50,000.00 */}
-                      {"₦ XXX"}
-                    </span>
-                  </div>
-                </div>
-              </div>
+            {/* commented the chart and moved to the bottom */}
               <div className="p-6">
                 <table className="w-full">
                   {statements?.SCF?.items?.map((item: any, i: number) => {
@@ -1458,6 +1330,8 @@ const Page = () => {
   const [trialBalanceBreakdown, setTrialBalanceBreakdown] = useState<any>(null);
   const [statements, setStatements] = useState(null);
 
+  console.log(trialBalance);
+
   const { loading, data, error } = useQuery(EXTRACT_TRIAL_BALANCE, {
     variables: { input: { year: 2023 } },
   });
@@ -1483,6 +1357,16 @@ const Page = () => {
       setTrialBalance(data?.extractTrialBalance?.data);
     }
   }, [data]);
+
+  useEffect(() => {
+    extractStatements({
+      variables: {
+        input: {
+          year: 2022,
+        },
+      },
+    });  
+  },[])
 
   // useEffect(() => {
   //   console.log(data);
@@ -1537,35 +1421,52 @@ const Page = () => {
   // console.log(trialBalanceBreakdown);
 
   return (
-    <div>
-      <div className="flex justify-between items-center">
-        <div>
-          <h3 className="font-extrabold text-[28px] leading-[41px] text-[#060809]">
-            Accounting
-          </h3>
-          <p className="text-[#4C5259] text-[16px] leading-[23px]">
-            Track your financial data and manage your company{"s"} financial
-            health
-          </p>
+    <>
+      { !trialBalance && !loading ? (
+        <div className="flex justify-between items-center">
+          <div>
+            <h3 className="font-extrabold text-[28px] leading-[41px] text-[#060809]">
+              Accounting
+            </h3>
+            <p className="text-[#4C5259] text-[16px] leading-[23px]">
+              Kindly contact your account manager to access your financial
+              statement
+            </p>
+          </div>
+          {/* <Button className="border-[2px] border-[#00085A] bg-white text-[#00085A] w-[156px]">
+            Link a new bank
+          </Button> */}
         </div>
-        <Button className="border-[2px] border-[#00085A] bg-white text-[#00085A] w-[156px]">
-          Link a new bank
-        </Button>
-      </div>
-      {showStatements && (
-        <Statements
-          activeStatement={activeStatement}
-          setActiveStatement={setActiveStatement}
-          statements={statements}
-        />
-      )}
-      {activeStatement === "overview" && (
-        <div className="mt-8 grid grid-cols-[1fr,auto] gap-x-6">
-          <div className="bg-white border-[1px] border-[#E6E6E6] rounded-2xl">
-            <div className="h-[52px] flex justify-between items-center px-6 border-b-[1px] border-[#EAEDEF]">
-              <span>Trial Balance</span>
+      ) : (
+        <div>
+          <div className="flex justify-between items-center">
+            <div>
+              <h3 className="font-extrabold text-[28px] leading-[41px] text-[#060809]">
+                Accounting
+              </h3>
+              <p className="text-[#4C5259] text-[16px] leading-[23px]">
+                Track your financial data and manage your company{"s"} financial
+                health
+              </p>
+            </div>
+            <Button className="border-[2px] border-[#00085A] bg-white text-[#00085A] w-[156px]">
+              Link a new bank
+            </Button>
+          </div>
+          {/* {showStatements && ( */}
+          <Statements
+            activeStatement={activeStatement}
+            setActiveStatement={setActiveStatement}
+            statements={statements}
+          />
+          {/* )} */}
+          {activeStatement === "overview" && (
+            <div className="mt-8 grid grid-cols-[1fr,auto] gap-x-6">
+              <div className="bg-white border-[1px] border-[#E6E6E6] rounded-2xl">
+                <div className="h-[52px] flex justify-between items-center px-6 border-b-[1px] border-[#EAEDEF]">
+                  <span>Trial Balance</span>
 
-              <button
+                  {/* <button
                 onClick={() => {
                   // setShowTimePicker(true);
                   extractStatements({
@@ -1579,106 +1480,114 @@ const Page = () => {
                 }}
                 className="w-[150px] bg-[#071A7E] text-white py-2 px-4 rounded-[4px] font-medium text-[14px] leading-[20px] h-[36px]"
               >
-                {/* Auto-Generate Statements */}
+                
                 View Statements
-              </button>
-            </div>
-            <div className="p-6">
-              <table className="w-full">
-                <thead>
-                  <tr className="text-[#021645]">
-                    <th className="px-3.5 py-3 text-left">ACCOUNTS</th>
-                    <th className="px-3.5 py-3 text-right">DEBIT (₦)</th>
-                    <th className="px-3.5 py-3 text-right">CREDIT (₦)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {trialBalance?.elements?.length &&
-                    trialBalance?.elements?.map((accountt: any, i: number) => {
-                      // console.log(accountt);
-                      const { element, names, debit, credit } = accountt;
-                      return (
-                        <>
-                          <tr
-                            key={i}
-                            className="bg-[#F8F9FE] border-t-[1px] border-[#8083AC]"
-                          >
-                            <td className="px-3.5 py-3 text-left font-bold text-[12px] leading-[16px] text-[#021645]">
-                              <span className="flex items-center gap-x-1">
-                                <span>{element}</span>
-                                <span>
-                                  <PencilSimple size={14} />
-                                </span>
-                              </span>
-                            </td>
-                            <td className="px-3.5 py-3 text-right"></td>
-                            <td className="px-3.5 py-3 text-right"></td>
-                          </tr>
-                          {names.map((account_type: any, i: number) => {
+              </button> */}
+                </div>
+                <div className="p-6">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="text-[#021645]">
+                        <th className="px-3.5 py-3 text-left">ACCOUNTS</th>
+                        <th className="px-3.5 py-3 text-right">DEBIT (₦)</th>
+                        <th className="px-3.5 py-3 text-right">CREDIT (₦)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {trialBalance?.elements?.length &&
+                        trialBalance?.elements?.map(
+                          (accountt: any, i: number) => {
+                            // console.log(accountt);
+                            const { element, names, debit, credit } = accountt;
                             return (
-                              <tr
-                                key={i}
-                                className="border-b-[1px] border-[#E7E7E7] text-[14px] leading-[16px] text-[#4C5259]"
-                              >
-                                <td className="px-3.5 py-3 text-left">
-                                  <span className="flex items-center gap-x-1">
-                                    <span
-                                      className="cursor-pointer"
-                                      // onClick={() => {
-                                      //   getBreakdown({
-                                      //     variables: {
-                                      //       input: {
-                                      //         account,
-                                      //         account_type:
-                                      //           account_type?.account_type,
-                                      //         trial_balance_id: `${trialBalance?.id}`,
-                                      //       },
-                                      //     },
-                                      //   });
-                                      // }}
-                                    >
-                                      {account_type?.name}
+                              <>
+                                <tr
+                                  key={i}
+                                  className="bg-[#F8F9FE] border-t-[1px] border-[#8083AC]"
+                                >
+                                  <td className="px-3.5 py-3 text-left font-bold text-[12px] leading-[16px] text-[#021645]">
+                                    <span className="flex items-center gap-x-1">
+                                      <span>{element}</span>
+                                      <span>
+                                        <PencilSimple size={14} />
+                                      </span>
                                     </span>
-                                    {/* <span>
+                                  </td>
+                                  <td className="px-3.5 py-3 text-right"></td>
+                                  <td className="px-3.5 py-3 text-right"></td>
+                                </tr>
+                                {names.map((account_type: any, i: number) => {
+                                  return (
+                                    <tr
+                                      key={i}
+                                      className="border-b-[1px] border-[#E7E7E7] text-[14px] leading-[16px] text-[#4C5259]"
+                                    >
+                                      <td className="px-3.5 py-3 text-left">
+                                        <span className="flex items-center gap-x-1">
+                                          <span
+                                            className="cursor-pointer"
+                                            // onClick={() => {
+                                            //   getBreakdown({
+                                            //     variables: {
+                                            //       input: {
+                                            //         account,
+                                            //         account_type:
+                                            //           account_type?.account_type,
+                                            //         trial_balance_id: `${trialBalance?.id}`,
+                                            //       },
+                                            //     },
+                                            //   });
+                                            // }}
+                                          >
+                                            {account_type?.name}
+                                          </span>
+                                          {/* <span>
                                           <ArrowSquareOut size={12} />
                                         </span> */}
-                                  </span>
-                                </td>
-                                <td className="px-3.5 py-3 text-right">
-                                  {account_type?.debit}
-                                </td>
-                                <td className="px-3.5 py-3 text-right">
-                                  {account_type?.credit}
-                                </td>
-                              </tr>
+                                        </span>
+                                      </td>
+                                      <td className="px-3.5 py-3 text-right">
+                                        {account_type?.debit}
+                                      </td>
+                                      <td className="px-3.5 py-3 text-right">
+                                        {account_type?.credit}
+                                      </td>
+                                    </tr>
+                                  );
+                                })}
+                                <tr className="border-b-[1px] border-[#E7E7E7] font-bold text-[14px] leading-[16px] text-[#021645]">
+                                  <td className="px-3.5 py-3 text-left">
+                                    Total {element}
+                                  </td>
+                                  <td className="px-3.5 py-3 text-right">
+                                    {debit}
+                                  </td>
+                                  <td className="px-3.5 py-3 text-right">
+                                    {credit}
+                                  </td>
+                                </tr>
+                                <tr className="">
+                                  <td className="px-3.5 py-3 text-left"></td>
+                                  <td className="px-3.5 py-3 text-right"></td>
+                                  <td className="px-3.5 py-3 text-right"></td>
+                                </tr>
+                              </>
                             );
-                          })}
-                          <tr className="border-b-[1px] border-[#E7E7E7] font-bold text-[14px] leading-[16px] text-[#021645]">
-                            <td className="px-3.5 py-3 text-left">
-                              Total {element}
-                            </td>
-                            <td className="px-3.5 py-3 text-right">{debit}</td>
-                            <td className="px-3.5 py-3 text-right">{credit}</td>
-                          </tr>
-                          <tr className="">
-                            <td className="px-3.5 py-3 text-left"></td>
-                            <td className="px-3.5 py-3 text-right"></td>
-                            <td className="px-3.5 py-3 text-right"></td>
-                          </tr>
-                        </>
-                      );
-                    })}
-                  <tr className="border-t-[2px] border-t-[#021645] border-b-[1px] border-[#E7E7E7] font-bold text-[16px] leading-[24px] text-[#021645]">
-                    <td className="px-3.5 py-3 text-left">All Account Total</td>
-                    <td className="px-3.5 py-3 text-right">
-                      {trialBalance?.debit}
-                    </td>
-                    <td className="px-3.5 py-3 text-right">
-                      {trialBalance?.credit}
-                    </td>
-                  </tr>
-                </tbody>
-                {/* <tr className="bg-[#F8F9FE] border-t-[1px] border-[#8083AC]">
+                          }
+                        )}
+                      <tr className="border-t-[2px] border-t-[#021645] border-b-[1px] border-[#E7E7E7] font-bold text-[16px] leading-[24px] text-[#021645]">
+                        <td className="px-3.5 py-3 text-left">
+                          All Account Total
+                        </td>
+                        <td className="px-3.5 py-3 text-right">
+                          {trialBalance?.debit}
+                        </td>
+                        <td className="px-3.5 py-3 text-right">
+                          {trialBalance?.credit}
+                        </td>
+                      </tr>
+                    </tbody>
+                    {/* <tr className="bg-[#F8F9FE] border-t-[1px] border-[#8083AC]">
                     <td className="px-3.5 py-3 text-left font-bold text-[12px] leading-[16px] text-[#021645]">
                       <span className="flex items-center gap-x-1">
                         <span>Assets</span>
@@ -1690,7 +1599,7 @@ const Page = () => {
                     <td className="px-3.5 py-3 text-right"></td>
                     <td className="px-3.5 py-3 text-right"></td>
                   </tr> */}
-                {/* <tr className="border-b-[1px] border-[#E7E7E7] text-[14px] leading-[16px] text-[#4C5259]">
+                    {/* <tr className="border-b-[1px] border-[#E7E7E7] text-[14px] leading-[16px] text-[#4C5259]">
                     <td className="px-3.5 py-3 text-left">
                       <span className="flex items-center gap-x-1">
                         <span>Account Receivable</span>
@@ -1712,7 +1621,7 @@ const Page = () => {
                     </td>
                     <td className="px-3.5 py-3 text-right">10,545.64</td>
                   </tr> */}
-                {/* <>
+                    {/* <>
                   <tr className="bg-[#F8F9FE] border-t-[1px] border-[#8083AC]">
                     <td className="px-3.5 py-3 text-left font-bold text-[12px] leading-[16px] text-[#021645]">
                       <span className="flex items-center gap-x-1">
@@ -1849,10 +1758,10 @@ const Page = () => {
                     <td className="px-3.5 py-3 text-right">0.00</td>
                   </tr>
                 </> */}
-              </table>
-            </div>
-          </div>
-          {/* <div className="bg-white border-[1px] border-[#E6E6E6] rounded-2xl">
+                  </table>
+                </div>
+              </div>
+              {/* <div className="bg-white border-[1px] border-[#E6E6E6] rounded-2xl">
             <div className="h-[52px] flex justify-between items-center px-6 border-b-[1px] border-[#EAEDEF]">
               <span>Chart Transactions </span>
             </div>
@@ -1890,61 +1799,109 @@ const Page = () => {
               )}
             </div>
           </div> */}
+            </div>
+          )}
+          {showTimePicker && (
+            <Portal onClose={() => setShowTimePicker(false)}>
+              <div className="w-[546px] h-[341px] bg-white rounded-[16px]">
+                <div className="px-6 py-4 border-b-[1px] border-[#0000001F] font-semibold	text-[20px] leading-[28px]">
+                  Auto-generate Statements
+                  <p className="text-[14px] leading-[20px] text-[#4C5259] max-w-[466px]">
+                    This would create an overview of your income statement,
+                    cash-balance statements and balance sheets
+                  </p>
+                </div>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <div className="">
+                    <div className="flex flex-col gap-y-4 px-6 py-4">
+                      <div className="grid grid-cols-2 gap-2">
+                        <DatePicker
+                          label="From"
+                          placeholder="02/04/2023"
+                          register={register}
+                          name="from"
+                          errorMessage={errors?.from?.message}
+                        />
+                        <DatePicker
+                          label="To"
+                          placeholder="02/04/2023"
+                          register={register}
+                          name="to"
+                          errorMessage={errors?.to?.message}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex justify-end gap-x-2 py-3 rounded-b-[16px] mt-5 bg-[#F2F3F7] px-6 h-[105px]">
+                      <Button
+                        onClick={() => setShowTimePicker(false)}
+                        type="button"
+                        className="w-[95px] bg-white text-[#071A7E] border-[2px] border-[#EAEDEF]"
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        className="w-[196px]"
+                        disabled={!isValid || isSubmitting}
+                        type="submit"
+                      >
+                        Generate
+                      </Button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </Portal>
+          )}
         </div>
       )}
-      {showTimePicker && (
-        <Portal onClose={() => setShowTimePicker(false)}>
-          <div className="w-[546px] h-[341px] bg-white rounded-[16px]">
-            <div className="px-6 py-4 border-b-[1px] border-[#0000001F] font-semibold	text-[20px] leading-[28px]">
-              Auto-generate Statements
-              <p className="text-[14px] leading-[20px] text-[#4C5259] max-w-[466px]">
-                This would create an overview of your income statement,
-                cash-balance statements and balance sheets
-              </p>
-            </div>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="">
-                <div className="flex flex-col gap-y-4 px-6 py-4">
-                  <div className="grid grid-cols-2 gap-2">
-                    <DatePicker
-                      label="From"
-                      placeholder="02/04/2023"
-                      register={register}
-                      name="from"
-                      errorMessage={errors?.from?.message}
-                    />
-                    <DatePicker
-                      label="To"
-                      placeholder="02/04/2023"
-                      register={register}
-                      name="to"
-                      errorMessage={errors?.to?.message}
-                    />
-                  </div>
-                </div>
-                <div className="flex justify-end gap-x-2 py-3 rounded-b-[16px] mt-5 bg-[#F2F3F7] px-6 h-[105px]">
-                  <Button
-                    onClick={() => setShowTimePicker(false)}
-                    type="button"
-                    className="w-[95px] bg-white text-[#071A7E] border-[2px] border-[#EAEDEF]"
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    className="w-[196px]"
-                    disabled={!isValid || isSubmitting}
-                    type="submit"
-                  >
-                    Generate
-                  </Button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </Portal>
-      )}
-    </div>
+    </>
   );
 };
 
 export default Page;
+
+
+
+  // <div className="p-6 grid grid-cols-3 gap-x-6">
+  //   <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
+  //     <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
+  //       <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
+  //         <Coins size={20} />
+  //       </span>
+  //       <span className="font-medium text-[14px] leading-[20px] text-[#4C5259] flex items-center gap-x-1">
+  //         Revenue <Info />
+  //       </span>
+  //       <span className="font-semibold text-[24px] leading-[35px] text-[#021645]">
+  //         {"₦ XXX"}
+  //       </span>
+  //     </div>
+  //   </div>
+  //   <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
+  //     <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
+  //       <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
+  //         <ArrowDown size={20} />
+  //       </span>
+  //       <span className="font-medium text-[14px] leading-[20px] text-[#4C5259] flex items-center gap-x-1">
+  //         Net Income <Info />
+  //       </span>
+  //       <span className="font-semibold text-[24px] leading-[35px] text-[#021645]">
+  //         {/* ₦70,000.01 */}
+  //         {"₦ XXX"}
+  //       </span>
+  //     </div>
+  //   </div>
+  //   <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
+  //     <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
+  //       <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
+  //         <Money size={20} />
+  //       </span>
+  //       <span className="font-medium text-[14px] leading-[20px] text-[#4C5259] flex items-center gap-x-1">
+  //         Expenses <Info />
+  //       </span>
+  //       <span className="font-semibold text-[24px] leading-[35px] text-[#021645]">
+  //         {/* ₦50,000.00 */}
+  //         {"₦ XXX"}
+  //       </span>
+  //     </div>
+  //   </div>
+  // </div>;

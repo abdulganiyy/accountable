@@ -494,6 +494,7 @@ const ServicePicker: FC<ServicePickerProps> = ({ onClose, services,pickedService
               type="button"
               className="w-[164px]"
               isLoading={res.loading}
+              disabled={!duration || selectedCard === ""}
               onClick={() => {
                 // console.log(
                 //   recurring,

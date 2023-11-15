@@ -125,7 +125,7 @@ export default function CompleteOnboarding() {
                     <Select
                       name="industry"
                       label="Industry"
-                      placeholder="Industry Type"
+                      placeholder="Select Industry"
                       register={register}
                       setValue={setValue}
                       options={[
@@ -155,8 +155,8 @@ export default function CompleteOnboarding() {
                     />
                     <Select
                       name="size"
-                      label="Company size"
-                      placeholder="Size"
+                      label="No of Employees"
+                      placeholder="Select no of employees"
                       register={register}
                       setValue={setValue}
                       options={[
@@ -166,7 +166,7 @@ export default function CompleteOnboarding() {
                         },
                         {
                           key: "Between 200 and 300",
-                          value: "Between 400 and 500",
+                          value: "Between 200 and 300",
                         },
                         {
                           key: "Between 300 and 400",
@@ -193,16 +193,20 @@ export default function CompleteOnboarding() {
                   setValue={setValue}
                   options={[
                     {
+                      key: "0 - $50,000",
+                      value: "$0 - $50,000",
+                    },
+                    {
                       key: "$50,000 - $100,000",
                       value: "$50,000 - $100,000",
                     },
                     {
-                      key: "$100,000 - $200,000",
-                      value: "$100,000 - $200,000",
+                      key: "$100,000 - $500,000",
+                      value: "$100,000 - $500,000",
                     },
                     {
-                      key: "$200,000 - $250,000",
-                      value: "$200,000 - $250,000",
+                      key: "> $500,000",
+                      value: "> $500,000",
                     },
                   ]}
                   errorMessage={error?.revenue?.message}

@@ -72,7 +72,7 @@ const Select: FC<SelectProps> = ({
               })}
             </div>
           )}
-          <span>{current ? current : placeholder}</span>
+          <span className={`${!current && "text-[#A0A0A0]"}`}>{current ? current : placeholder}</span>
           <span className="cursor-pointer bg-[#F2F3F7] rounded-md p-1 px-2">
             <MdOutlineKeyboardArrowDown size={20} color="#A0A0A0" />
           </span>

@@ -48,13 +48,23 @@ const Page = () => {
   const timerId = useRef<any>(null);
 
   const { loading, data, error } = useQuery(GET_USER);
-
-  const result = useQuery(LINKED_ACCOUNTS, {
+  const manager = data?.user?.data?.manager || null;
+  
+  const result= useQuery(LINKED_ACCOUNTS, {
     variables: {
       input: {
         bankAccount: true,
       },
     },
+    onCompleted(data) {
+      console.log(data);
+      if (data?.linkedAccounts?.data.length) {
+        setAccountLinked(true);
+      }
+    },
+    onError(error) {
+      console.log(error);
+    }
   });
 
   useEffect(() => {
@@ -72,7 +82,6 @@ const Page = () => {
 
   useEffect(() => {
     const storedUser = localStorage?.getItem("userData");
-
     if (storedUser) {
       console.log(JSON.parse(storedUser));
       setUser(JSON.parse(storedUser));
@@ -102,7 +111,7 @@ const Page = () => {
   //   };
   // }, [accountLinked, timerId]);
 
-  if (result?.loading)
+  if ( loading)
     return (
       <div className="h-full flex items-center justify-center">
         <BeatLoader />
@@ -115,7 +124,7 @@ const Page = () => {
         <div>
           <div>
             <h3 className="font-extrabold text-[28px] leading-[42px] text-[#060809]">
-              Hello, {user?.firstName || "Chris!"}
+              Hello, {user?.firstName || ""}
             </h3>
             <p className="text-[#414141] text-[18px] leading-[28px]">
               Welcome to Accountable! {`Let's`} get started by completing a few
@@ -302,7 +311,7 @@ const Page = () => {
           <div className="flex justify-between">
             <div>
               <h3 className="font-extrabold text-[28px] leading-[42px] text-[#060809]">
-                Good morning, {user?.firstName || "Chris!"} 🎉
+                Hello, {user?.firstName || ""} 🎉
               </h3>
               <p className="text-[#414141] text-[18px] leading-[28px]">
                 Welcome, here’s the summary of all your financials
@@ -313,7 +322,7 @@ const Page = () => {
                 C
               </span>
               <div className="flex flex-col">
-                <span>Fredrick Adams</span>
+                  <span>{manager?.firstName} {manager?.lastName}</span>
                 <span>Your account manager</span>
               </div>
               <span className="w-[32px] h-[32px] flex items-center justify-center rounded-full border-[1px] border-[#EAEDEF]">
@@ -323,7 +332,7 @@ const Page = () => {
           </div>
           {!trialBalanced ? (
             <>
-              <div className="flex gap-x-2 p-4 border-[1px] border-[1px] border-[#B3B5CE] border-dashed mt-6 rounded-[4px]">
+              <div className="flex gap-x-2 p-4 border-[1px] border-[#B3B5CE] border-dashed mt-6 rounded-[4px]">
                 <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] rounded-[8px] flex items-center justify-center">
                   <Info size={20} />
                 </span>
