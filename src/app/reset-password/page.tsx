@@ -38,18 +38,24 @@ export default function ResetPassword() {
       setError(error.message);
       toast.error(error.message);
     },
+    onCompleted: (data) => {
+      console.log("sherif here", data);
+       toast.success(data.resetPassword.message);
+       reset();
+      window.location.href = "/login";
+    },
   });
 
   const searchParams = useSearchParams();
 
   const token = searchParams?.get("token");
-  useEffect(() => {
-    if (result.data) {
-      console.log(result.data);
-      toast.success(result.data.resetPassword.message);
-      reset();
-    }
-  }, [result.data, reset]);
+  // useEffect(() => {
+  //   if (result.data) {
+  //     console.log(result.data);
+  //     toast.success(result.data.resetPassword.message);
+  //     reset();
+  //   }
+  // }, [result.data, reset]);
 
   const onSubmit = async (data: any) => {
     console.log(data);
@@ -94,7 +100,7 @@ export default function ResetPassword() {
               </div>
               <div className="mt-4">
                 <Button
-                  disabled={!isValid}
+                  disabled={!isValid || isSubmitting}
                   isLoading={isSubmitting}
                   type="submit"
                 >

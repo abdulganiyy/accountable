@@ -22,12 +22,14 @@ const schema = yup.object({
 interface MeetingProps {
   details?: any;
   link?: string;
+  update: () => void;
 }
 
-const Meeting: FC<MeetingProps> = ({ details, link }) => {
+const Meeting: FC<MeetingProps> = ({ details, link,update }) => {
   const [open, setOpen] = useState(false);
   const [openMeeting, setOpenMeeting] = useState(false);
   const [reschedule, setReschedule] = useState(false);
+  console.log("details", details);
 
   const {
     watch,
@@ -43,29 +45,50 @@ const Meeting: FC<MeetingProps> = ({ details, link }) => {
     mode: "onBlur",
   });
 
-  const [rescheduleMeeting, result] = useMutation(RESCHEDULE_MEETING);
-
-  const [deleteMeeting, res] = useMutation(DELETE_MEETING);
-
-  useEffect(() => {
-    // console.log(result.data);
-
-    if (result.data?.rescheduleMeeting?.code) {
-      toast.error(result.data?.rescheduleMeeting?.code);
-    } else if (result.data?.rescheduleMeeting?.message) {
-      toast.success(result.data?.rescheduleMeeting?.message);
+  const [rescheduleMeeting, result] = useMutation(RESCHEDULE_MEETING, {
+    onError: (error) => {
+      console.log(error.message);
+      toast.error(error.message);
+    },
+    onCompleted: (data) => {
+      toast.success(data.rescheduleMeeting.message);
+      setReschedule(false);
+      // refetch meetings
+      update();
     }
-  }, [result.data]);
+  });
 
-  useEffect(() => {
-    // console.log(res.data);
-
-    if (res.data?.deleteMeeting?.code) {
-      toast.error(res.data?.deleteMeeting?.code);
-    } else if (res.data?.deleteMeeting?.message) {
-      toast.success(res.data?.deleteMeeting?.message);
+  const [deleteMeeting, res] = useMutation(DELETE_MEETING, {
+    onError: (error) => {
+      console.log(error.message);
+      toast.error(error.message);
+    },
+    onCompleted: (data) => {
+      toast.success(data.deleteMeeting.message);
+      // refetch meetings
+      update();
     }
-  }, [res.data]);
+  });
+
+  // useEffect(() => {
+  //   // console.log(result.data);
+
+  //   if (result.data?.rescheduleMeeting?.code) {
+  //     toast.error(result.data?.rescheduleMeeting?.code);
+  //   } else if (result.data?.rescheduleMeeting?.message) {
+  //     toast.success(result.data?.rescheduleMeeting?.message);
+  //   }
+  // }, [result.data]);
+
+  // useEffect(() => {
+  //   // console.log(res.data);
+
+  //   if (res.data?.deleteMeeting?.code) {
+  //     toast.error(res.data?.deleteMeeting?.code);
+  //   } else if (res.data?.deleteMeeting?.message) {
+  //     toast.success(res.data?.deleteMeeting?.message);
+  //   }
+  // }, [res.data]);
 
   const onSubmit = async (data: any) => {
     // console.log(details?.id);
@@ -167,7 +190,7 @@ const Meeting: FC<MeetingProps> = ({ details, link }) => {
               href={`${details?.hangoutLink}`}
               target="_blank"
               rel="noopener noreferrer"
-            >
+            > 
               Join Meeting
             </a>
           </div>
@@ -234,6 +257,7 @@ const Meeting: FC<MeetingProps> = ({ details, link }) => {
                   <Button
                     className="w-[196px]"
                     disabled={!isValid || isSubmitting}
+                    isLoading={isSubmitting}
                     type="submit"
                   >
                     Reschedule Meeting

@@ -11,6 +11,7 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   options?: any[];
   errorMessage?: any;
   trigger?: any;
+  callBack?:(value:any) => void
 }
 
 const Select: FC<SelectProps> = ({
@@ -23,6 +24,7 @@ const Select: FC<SelectProps> = ({
   options,
   errorMessage,
   trigger,
+  callBack,
   ...rest
 }) => {
   const [show, setShow] = useState(false);
@@ -34,6 +36,7 @@ const Select: FC<SelectProps> = ({
       shouldTouch: true,
       shouldDirty: true,
     });
+    callBack && callBack(name);
   }, [current, setValue, name, trigger]);
 
   // console.log(errorMessage);
@@ -56,7 +59,9 @@ const Select: FC<SelectProps> = ({
                 return (
                   <span
                     onClick={() => {
+                      console.log(option);
                       setCurrent(option.value);
+                      callBack && callBack(option);
                     }}
                     key={option.key}
                     className="flex items-center gap-x-2"

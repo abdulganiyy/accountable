@@ -21,12 +21,11 @@ const Page = () => {
   const [scheduleCallSuccess, setScheduleCallSuccess] = useState(false);
   const [link, setLink] = useState("");
   const [meetings, setMeetings] = useState<any>([]);
-
   console.log(meetings);
 
   const [currentDate, setCurrentDate] = useState(moment());
 
-  const { loading, data, error } = useQuery(GET_ACCOUNT_MANAGER, {
+  const { loading, data, error,refetch } = useQuery(GET_ACCOUNT_MANAGER, {
     variables: {
       input: { month: currentDate.month(), year: currentDate.year() },
     },
@@ -138,6 +137,7 @@ const Page = () => {
                       );
                     })[0]
                   }
+                  update={refetch}
                   link={link}
                 />
               )}
@@ -267,6 +267,7 @@ const Page = () => {
           onClose={() => {
             setScheduleCall(false);
             setScheduleCallSuccess(false);
+            refetch();
           }}
         >
           <MeetingScheduler
@@ -274,9 +275,12 @@ const Page = () => {
               setScheduleCall(false);
             }}
             onSubmitCallback={() => {
-              setScheduleCall(false);
               setScheduleCallSuccess(true);
+              refetch();
+              setScheduleCall(false);
+             
             }}
+
           />
         </Portal>
       )}

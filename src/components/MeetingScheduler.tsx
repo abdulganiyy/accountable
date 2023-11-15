@@ -37,7 +37,7 @@ const MeetingScheduler: FC<MeetingSchedulerProps> = ({
   const { loading, data, error } = useQuery(GET_ACCOUNT_MANAGER, {
     variables: {
       input: { month: +currentDate.month(), year: +currentDate.year() },
-    },
+    }
   });
 
   useEffect(() => {

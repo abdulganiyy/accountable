@@ -151,12 +151,12 @@ export default function Layout({ children }: { children: ReactNode }) {
           >
             <ChatDots size={20} /> Messages
           </MenuLink>
-          <MenuLink
+          {/* <MenuLink
             href="/dashboard/reports"
             active={pathName === "/dashboard/reports" && true}
           >
             <ChartPieSlice size={20} /> Reports
-          </MenuLink>
+          </MenuLink> */}
           <MenuLink
             href="/dashboard/services"
             active={pathName === "/dashboard/services" && true}
