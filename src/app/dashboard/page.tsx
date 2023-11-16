@@ -207,7 +207,7 @@ const Page = () => {
                         setActive(2);
                       }}
                     >
-                      Skip and continue
+                      Continue
                     </Button>
                   </>
                 ) : active === 2 ? (
@@ -283,6 +283,7 @@ const Page = () => {
               }}
               successHandler={() => {
                 setAccountLinked(true);
+                result.refetch();
               }}
             />
           )}

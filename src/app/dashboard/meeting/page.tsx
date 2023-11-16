@@ -13,6 +13,7 @@ import MeetingScheduler from "@/components/MeetingScheduler";
 import { twMerge } from "tailwind-merge";
 import { GET_ACCOUNT_MANAGER } from "@/graphql/queries";
 import { useQuery } from "@apollo/client";
+import { BeatLoader } from "react-spinners";
 
 const Page = () => {
   const [hasEvent, setHasEvent] = useState(true);
@@ -179,7 +180,13 @@ const Page = () => {
     setCurrentDate(moment(currentDate).add(1, "month"));
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <div className="h-full flex items-center justify-center">
+        <BeatLoader />
+      </div>
+    );
+  }
 
   console.log(error);
 
