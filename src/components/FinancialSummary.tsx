@@ -14,31 +14,11 @@ import {
   Scales,
   Rocket,
 } from "@phosphor-icons/react";
-import { FINANCIAL_SUMMARY } from "@/graphql/queries";
-import { useQuery } from "@apollo/client";
-import { BeatLoader } from "react-spinners";
 
-const FinancialSummary = () => {
-  const [summary, setSummary] = useState<any>(null);
-  const { loading, data, error } = useQuery(FINANCIAL_SUMMARY);
 
-  useEffect(() => {
-    // console.log(data);
-    if (data?.user?.code) {
-      console.log(data?.user?.code);
-    } else if (data?.financialSummary?.data) {
-      setSummary(data?.financialSummary?.data);
-    }
-  }, [data]);
+const FinancialSummary = ({summary}:{summary:any}) => {
 
   console.log(summary);
-
-  if (loading)
-    return (
-      <div className="flex justify-center items-center">
-        <BeatLoader />
-      </div>
-    );
 
   return (
     <div className="bg-white border-[1px] border-[#E6E6E6] rounded-2xl mt-8">

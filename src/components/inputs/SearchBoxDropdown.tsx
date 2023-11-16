@@ -5,10 +5,11 @@ import { useQuery } from "@apollo/client";
 import { GET_BANKS } from "@/graphql/queries";
 
 import { twMerge } from "tailwind-merge";
+import { BeatLoader } from "react-spinners";
 
 const SearchBoxDropdown = ({ selectedBank, setSelectedBank }: any) => {
   const [searchText, setSearchText] = useState("");
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(true);
   const [banks, setBanks] = useState<any>([]);
   // const [bankName, setBankName] = useState<string>("");
 
@@ -75,6 +76,11 @@ const SearchBoxDropdown = ({ selectedBank, setSelectedBank }: any) => {
       </button>
       {isDropdownOpen && (
         <div className="absolute top-[60px]">
+          {loading && (
+            <div className="h-full w-full flex items-center justify-center ">
+              <BeatLoader />
+            </div>
+          )}
           <div className="grid grid-cols-3 gap-4">
             {filteredBanks?.length &&
               filteredBanks?.slice(0, 10).map((bank: any, index: number) => (

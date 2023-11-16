@@ -55,6 +55,8 @@ import { GENERATE_STATEMENTS } from "@/graphql/mutations";
 import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
 import CustomDatePicker from "@/components/inputs/CustomDatePicker";
 import LinkBanks from "@/components/LinkBanks";
+import { handleCSVExport } from "@/utils/csvExport";
+import { BeatLoader } from "react-spinners";
 
 ChartJS.register(ArcElement);
 
@@ -175,6 +177,7 @@ const Statements = ({
   // const [activeStatement, setActiveStatement] = useState("overview");
   const [more, setMore] = useState("");
   const [chartType, setChartType] = useState("line");
+  console.log(statements);
 
   return (
     <div className="mt-[45px]">
@@ -509,10 +512,19 @@ const Statements = ({
                     28 Feb 23 – 10 Mar 23 <CaretDown />
                   </button> */}
                   <button
-                    onClick={() => {}}
+                    onClick={() => {
+                      handleCSVExport(
+                        statements?.SPL,
+                        "Statement of profit or loss"
+                      );
+                    }}
                     className="bg-[#071A7E] text-white py-2 px-4 rounded-[4px] font-medium text-[14px] leading-[20px] h-[36px] flex items-center gap-x-1"
+                    disabled={
+                      !statements.SPL || statements.SPL?.items?.length === 0
+                    }
                   >
-                    Download as <CaretDown />
+                    Download
+                    {/* as <CaretDown /> */}
                   </button>
                 </div>
               </div>
@@ -702,10 +714,19 @@ const Statements = ({
                     28 Feb 23 – 10 Mar 23 <CaretDown />
                   </button> */}
                   <button
-                    onClick={() => {}}
+                    onClick={() => {
+                      handleCSVExport(
+                        statements?.SFP,
+                        "Statement of Financial Position"
+                      );
+                    }}
                     className="bg-[#071A7E] text-white py-2 px-4 rounded-[4px] font-medium text-[14px] leading-[20px] h-[36px] flex items-center gap-x-1"
+                    disabled={
+                      !statements.SFP || statements.SFP?.items?.length === 0
+                    }
                   >
-                    Download as <CaretDown />
+                    Download
+                    {/* as <CaretDown /> */}
                   </button>
                 </div>
               </div>
@@ -895,14 +916,23 @@ const Statements = ({
                     28 Feb 23 – 10 Mar 23 <CaretDown />
                   </button> */}
                   <button
-                    onClick={() => {}}
+                    onClick={() => {
+                      handleCSVExport(
+                        statements?.SCF,
+                        "Statement of Cash Flow"
+                      );
+                    }}
                     className="bg-[#071A7E] text-white py-2 px-4 rounded-[4px] font-medium text-[14px] leading-[20px] h-[36px] flex items-center gap-x-1"
+                    disabled={
+                      !statements.SCF || statements.SCF?.items?.length === 0
+                    }
                   >
-                    Download as <CaretDown />
+                    Download
+                    {/* as <CaretDown /> */}
                   </button>
                 </div>
               </div>
-            {/* commented the chart and moved to the bottom */}
+              {/* commented the chart and moved to the bottom */}
               <div className="p-6">
                 <table className="w-full">
                   {statements?.SCF?.items?.map((item: any, i: number) => {
@@ -1326,15 +1356,17 @@ const Page = () => {
   const [selectedChart, setSelectedChart] = useState<any>(null);
   const [showStatements, setShowStatements] = useState(false);
   const [activeStatement, setActiveStatement] = useState("overview");
-  const [trialBalance, setTrialBalance] = useState<any>(null);
+  // const [trialBalance, setTrialBalance] = useState<any>(null);
   const [trialBalanceBreakdown, setTrialBalanceBreakdown] = useState<any>(null);
   const [statements, setStatements] = useState(null);
+    const [linkBanks, setLinkBanks] = useState(false);
 
-  console.log(trialBalance);
+
 
   const { loading, data, error } = useQuery(EXTRACT_TRIAL_BALANCE, {
     variables: { input: { year: 2023 } },
   });
+  const trialBalance = data?.extractTrialBalance?.data;
 
   // const [getBreakdown, { loading, data, error }] = useLazyQuery(
   //   TRIAL_BALANCE_BREAKDOWN
@@ -1348,15 +1380,15 @@ const Page = () => {
   //   variables: { input: { trial_balance_id: "28" } },
   // });
 
-  useEffect(() => {
-    // console.log(result);
-    if (data?.extractTrialBalance?.code) {
-      console.log(data?.extractTrialBalance?.code);
-    } else if (data?.extractTrialBalance?.data) {
-      console.log(data?.extractTrialBalance?.data);
-      setTrialBalance(data?.extractTrialBalance?.data);
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   // console.log(result);
+  //   if (data?.extractTrialBalance?.code) {
+  //     console.log(data?.extractTrialBalance?.code);
+  //   } else if (data?.extractTrialBalance?.data) {
+  //     console.log(data?.extractTrialBalance?.data);
+  //     setTrialBalance(data?.extractTrialBalance?.data);
+  //   }
+  // }, [data]);
 
   useEffect(() => {
     extractStatements({
@@ -1420,9 +1452,16 @@ const Page = () => {
   console.log(trialBalance);
   // console.log(trialBalanceBreakdown);
 
+ if (loading )
+   return (
+     <div className="h-full flex items-center justify-center">
+       <BeatLoader />
+     </div>
+   );
+
   return (
     <>
-      { !trialBalance && !loading ? (
+      {!trialBalance && !loading ? (
         <div className="flex justify-between items-center">
           <div>
             <h3 className="font-extrabold text-[28px] leading-[41px] text-[#060809]">
@@ -1449,7 +1488,11 @@ const Page = () => {
                 health
               </p>
             </div>
-            <Button className="border-[2px] border-[#00085A] bg-white text-[#00085A] w-[156px]">
+              <Button className="border-[2px] border-[#00085A] bg-white text-[#00085A] w-[156px]"
+                onClick={() => {
+                  setLinkBanks(true);
+                }}
+              >
               Link a new bank
             </Button>
           </div>
@@ -1851,6 +1894,16 @@ const Page = () => {
                 </form>
               </div>
             </Portal>
+          )}
+          {linkBanks && (
+            <LinkBanks
+              onClose={() => {
+                setLinkBanks(false);
+              }}
+              successHandler={() => {
+                setLinkBanks(false);
+              }}
+            />
           )}
         </div>
       )}
