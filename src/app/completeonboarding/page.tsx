@@ -187,8 +187,8 @@ export default function CompleteOnboarding() {
                 )}
                 <Select
                   name="revenue"
-                  label="Monthly revenue"
-                  placeholder="Your monthly revenue"
+                  label="Annual revenue"
+                  placeholder="Your annual revenue"
                   register={register}
                   setValue={setValue}
                   options={[

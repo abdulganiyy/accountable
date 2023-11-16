@@ -2,9 +2,13 @@ import React, { FC } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-interface HeaderProps {}
+interface HeaderProps {
+  text?: string;
+  title?: string;
+  link?: string;
+}
 
-const Header: FC<HeaderProps> = () => {
+const Header: FC<HeaderProps> = ({ text, title, link}) => {
   return (
     <div className="flex justify-between items-center h-16 px-4 md:px-[148px] border-b-[1px] border-[#EAEDEF]">
       <div>
@@ -13,9 +17,9 @@ const Header: FC<HeaderProps> = () => {
         </Link>
       </div>
       <div className="text-[#555555] font-semibold text-sm">
-        Have an account?{" "}
-        <Link href="/login" className="text-[#DF5753] font-medium">
-          Login
+        {text || "Have an account?"}
+        <Link href={link||"/login"} className="text-[#DF5753] font-medium ml-2">
+         {title || "Login"} 
         </Link>
       </div>
     </div>

@@ -97,7 +97,7 @@ export default function Login() {
 
   return (
     <main className="min-h-screen bg-white">
-      <Header />
+      <Header text="Don’t have an account?" link="/signup" title="Sign Up" />
       <div className="mx-auto px-2 w-[365px] mt-[32px] flex flex-col gap-y-2 mb-6">
         <h1 className="text-[#060809] font-medium text-[28px] leading-[39.2px]">
           Welcome Back!

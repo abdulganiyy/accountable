@@ -27,6 +27,7 @@ import { useQuery } from "@apollo/client";
 import { BeatLoader } from "react-spinners";
 import PaidServiceCard from "@/components/PaidServiceCard";
 
+
 const Page = () => {
   const [chooseService, setChooseService] = useState<any>(false);
   const [services, setServices] = useState<any>([]);
@@ -71,6 +72,13 @@ const Page = () => {
     }
   }, [res.data]);
 
+    if (loading || res.loading)
+      return (
+        <div className="h-full flex items-center justify-center">
+          <BeatLoader />
+        </div>
+      );
+
   return (
     <div>
       <div className="flex justify-between">
@@ -85,7 +93,9 @@ const Page = () => {
         </div>
       </div>
       <div className="mt-6">
-        <div className="flex justify-between items-center">Paid Services</div>
+        {subscriptions?.length > 0 && (
+          <div className="flex justify-between items-center">Paid Services</div>
+        )}
         <div className="mt-3 grid grid-cols-3 gap-6">
           {subscriptions?.length > 0
             ? subscriptions.map((subscription: any, i: number) => {
@@ -132,7 +142,7 @@ const Page = () => {
                     frequency={frequency}
                     currency={currency}
                     setChooseService={setChooseService}
-                    setPickedServices={()=>setPickedServices([item])}
+                    setPickedServices={() => setPickedServices([item])}
                   />
                 );
               })
