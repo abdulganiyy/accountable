@@ -411,7 +411,7 @@ mutation PurchaseService($input: PurchaseServiceInput!) {
           cancelled
         }
         subscription {
-          _id
+          id
           active
           activeAt
         }

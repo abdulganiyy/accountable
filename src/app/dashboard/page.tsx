@@ -36,6 +36,7 @@ import { BeatLoader } from "react-spinners";
 import { ToastContainer, toast } from "react-toastify";
 
 const Page = () => {
+
   const [active, setActive] = useState(1);
   const [callScheduled, setCallScheduled] = useState(false);
   const [linkBanks, setLinkBanks] = useState(false);
@@ -43,42 +44,29 @@ const Page = () => {
   const [invite, setInvite] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [accountLinked, setAccountLinked] = useState<any>(false);
-  const [trialBalanced, setTrialBalanced] = useState<any>(false);
+  const [trialBalanced, setTrialBalanced] = useState<any>(true);
   const [chooseService, setChooseService] = useState<any>(false);
   const timerId = useRef<any>(null);
 
   const { loading, data, error } = useQuery(GET_USER);
   const manager = data?.user?.data?.manager || null;
+
+    const financialSummaryQuery = useQuery(FINANCIAL_SUMMARY);
+    const summary = financialSummaryQuery?.data?.financialSummary?.data || null;
   
-  const result= useQuery(LINKED_ACCOUNTS, {
+  const result = useQuery(LINKED_ACCOUNTS, {
     variables: {
       input: {
         bankAccount: true,
       },
     },
     onCompleted(data) {
-      console.log(data);
-      if (data?.linkedAccounts?.data.length) {
-        setAccountLinked(true);
-      }
+      console.log("linked account",data);
     },
     onError(error) {
       console.log(error);
     }
   });
-
-  useEffect(() => {
-    // console.log(data);
-    if (result?.data?.linkedAccounts?.code) {
-      console.log(result?.data?.linkedAccounts?.code);
-      console.log(result?.data?.linkedAccounts?.message);
-    } else if (result?.data?.linkedAccounts?.data) {
-      console.log(result?.data?.linkedAccounts?.data);
-      if (result?.data?.linkedAccounts?.data.length) {
-        setAccountLinked(true);
-      }
-    }
-  }, [result?.data]);
 
   useEffect(() => {
     const storedUser = localStorage?.getItem("userData");
@@ -111,7 +99,7 @@ const Page = () => {
   //   };
   // }, [accountLinked, timerId]);
 
-  if ( loading)
+  if (loading || result.loading || financialSummaryQuery.loading)
     return (
       <div className="h-full flex items-center justify-center">
         <BeatLoader />
@@ -120,7 +108,7 @@ const Page = () => {
 
   return (
     <>
-      {!accountLinked ? (
+      {!result?.data?.linkedAccounts?.data.length ? (
         <div>
           <div>
             <h3 className="font-extrabold text-[28px] leading-[42px] text-[#060809]">
@@ -322,7 +310,9 @@ const Page = () => {
                 C
               </span>
               <div className="flex flex-col">
-                  <span>{manager?.firstName} {manager?.lastName}</span>
+                <span>
+                  {manager?.firstName} {manager?.lastName}
+                </span>
                 <span>Your account manager</span>
               </div>
               <span className="w-[32px] h-[32px] flex items-center justify-center rounded-full border-[1px] border-[#EAEDEF]">
@@ -348,10 +338,10 @@ const Page = () => {
                   </div>
                 </div>
               </div>
-              <FinancialSummary />
+              <FinancialSummary summary={summary} />
             </>
           ) : (
-            <>{/* <FinancialSummary /> */}</>
+            <FinancialSummary summary={summary} />
           )}
           <div className="mt-6 grid grid-cols-2 gap-x-6">
             <div className="h-[384px] bg-white border-[1px] border-[#E6E6E6] rounded-2xl">
