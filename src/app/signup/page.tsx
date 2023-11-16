@@ -28,13 +28,9 @@ const schema = yup.object({
   website: yup
     .string()
     .matches(
-      /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+      /(((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?)?$/,
       "Enter correct url!"
-    )
-    .when("type", {
-      is: (val: any) => val !== "individual",
-      then: (schema) => schema.required(),
-    }),
+    ),
   password: yup
     .string()
     .required()
@@ -95,6 +91,7 @@ export default function Home() {
         input: {
           ...data,
           code: code ? code : undefined,
+          website: data?.website ? data?.website : undefined,
           // type: data.type === "individual" ? "INDIVIDUAL" : "COMPANY",
         },
       },
