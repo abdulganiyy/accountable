@@ -44,7 +44,7 @@ const PaidServiceCard: FC<PaidServiceCardProps> = ({ item }) => {
           <BookOpen size={20} />
         </span>
         <div
-          className={`flex py-1 px-3 gap-2 h-[28px flex items-center justify-center] rounded-[20px] ${cls[status]}`}
+          className={`flex py-1 px-3 gap-2 h-[28px items-center justify-center] rounded-[20px] ${cls[status]}`}
         >
           <span
             className={`w-[8px] h-[8px] flex rounded-full inline ${clss[status]}`}

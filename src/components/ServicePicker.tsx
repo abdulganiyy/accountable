@@ -21,6 +21,8 @@ import SelectTwo from "./inputs/SelectTwo";
 interface ServicePickerProps {
   onClose: () => void;
   services: any[];
+  pickedServices: any[];
+  setPickedServices: React.Dispatch<React.SetStateAction<any>>;
 }
 
 const schema = yup.object({
@@ -28,7 +30,7 @@ const schema = yup.object({
   service: yup.string().required("Value is mendatory"),
 });
 
-const ServicePicker: FC<ServicePickerProps> = ({ onClose, services }) => {
+const ServicePicker: FC<ServicePickerProps> = ({ onClose, services,pickedServices,setPickedServices }) => {
   const [addService, setAddService] = useState(true);
   const [addPayment, setAddPayment] = useState(false);
   const [addCardSuccess, setAddCardSuccess] = useState(false);
@@ -36,9 +38,9 @@ const ServicePicker: FC<ServicePickerProps> = ({ onClose, services }) => {
   const [selectedCard, setSelectedCard] = useState<string>("");
   const [paymentCard, setPaymentCard] = useState("");
   const [recurring, setRecurring] = useState(false);
-  const [pickedServices, setPickedServices] = useState<any>([]);
   const [duration, setDuration] = useState<any>(1);
   const [cards, setCards] = useState<any>(null);
+  const [addNew, setAddNew] = useState(false);
 
   const {
     watch,
@@ -70,12 +72,13 @@ const ServicePicker: FC<ServicePickerProps> = ({ onClose, services }) => {
     tx_ref: "Accountable-1687650943124-8278266",
     amount: 1,
     currency: "NGN",
-    payment_options: "card",
+    payment_options: 'card',
     customer: {
       email: user?.email,
       phone_number: user?.phone,
       name: user?.name,
     },
+
     // customizations: {
     //   title: "my Payment Title",
     //   description: "Payment for items in cart",
@@ -125,21 +128,46 @@ const ServicePicker: FC<ServicePickerProps> = ({ onClose, services }) => {
   }, [paymentCard, handleFlutterPayment]);
 
   const onSubmit = async (data: any) => {
+    setAddNew(true);
     // console.log(data);
-    const pickedservice = services.find(
-      (service) => service.name === data.service
-    );
+    // const pickedservice = services.find(
+    //   (service) => service.name === data.service
+    // );
+    // console.log(pickedservice);
 
-    if (
-      pickedServices.find((service: any) => pickedservice.name === service.name)
-    ) {
-      return;
-    }
+    // if (
+    //   pickedServices.find((service: any) => pickedservice.name === service.name)
+    // ) {
+    //   return;
+    // }
 
-    setPickedServices([...pickedServices, pickedservice]);
+    // setPickedServices([...pickedServices, pickedservice]);
     // setAddService(false);
     // setAddPayment(true);
   };
+
+  const updatePickedServices = (service: { value: string ,key:string}) => {
+    console.log("service is", service);
+
+      const pickedservice = services.find(
+        (item) => item.name === service.value
+      );
+    console.log(pickedservice);
+    if (!pickedservice) {
+      return
+    }
+
+      if (
+        pickedServices.find(
+          (service: any) => pickedservice?.name === service.name
+        )
+      ) {
+        return;
+      }
+    setPickedServices([...pickedServices, pickedservice]);
+    setAddNew(false);
+    // setAddPayment(true);
+  }
 
   const onChangePayment = (e: any) => {
     const name = e.target.name;
@@ -200,11 +228,11 @@ const ServicePicker: FC<ServicePickerProps> = ({ onClose, services }) => {
                         </span>
                         <div>
                           <div className="text-[#021645] text-[16px] leading-[23px] font-medium">
-                            {item.name}
+                            {item?.name}
                           </div>
                           <div className="text-[#414141] text-[12px] leading-[17.4px]">
-                            {item.currency}
-                            {item.price}
+                            {item?.currency}
+                            {item?.price}
                           </div>
                         </div>
                       </div>
@@ -223,7 +251,24 @@ const ServicePicker: FC<ServicePickerProps> = ({ onClose, services }) => {
                     </div>
                   );
                 })}
-                <div className="flex flex-col gap-y-4 w-full">
+                {
+                 ( addNew || pickedServices.length === 0 )  &&
+                  <div className="flex flex-col gap-y-4 w-full">
+                    <Select
+                      label="What service are you purchasing"
+                      placeholder="Select a service"
+                      name={`service`}
+                      register={register}
+                      setValue={setValue}
+                      options={services.map((item: any) => ({
+                        value: item?.name,
+                        key: item?.name,
+                      }))}
+                      callBack={updatePickedServices}
+                    />
+                  </div>
+                }
+                {/* <div className="flex flex-col gap-y-4 w-full">
                   <Select
                     label="What service are you purchasing"
                     placeholder="Select a service"
@@ -234,13 +279,16 @@ const ServicePicker: FC<ServicePickerProps> = ({ onClose, services }) => {
                       value: item?.name,
                       key: item?.name,
                     }))}
+                    callBack={() => {
+                    
+                  }}
                   />
-                </div>
+                </div> */}
                 <div>
                   <TextArea
                     label="Add note"
                     name="note"
-                    placeholder="Please write about your expected outcome for the services selected * work on copy"
+                    placeholder="Please write about your expected outcome for the service(s) selected * work on copy"
                     register={register}
                   />
                 </div>
@@ -261,6 +309,14 @@ const ServicePicker: FC<ServicePickerProps> = ({ onClose, services }) => {
               <Button
                 type="button"
                 className="w-[207px] bg-white text-[#071A7E] border-[2px] border-[#EAEDEF]"
+                onClick={()=>setAddNew(true)}
+              >
+                Add another service
+              </Button>
+              <Button
+                type="button"
+                className="w-[176px]"
+                disabled={!pickedServices.length}
                 onClick={() => {
                   if (pickedServices.length) {
                     setAddService(false);
@@ -269,9 +325,6 @@ const ServicePicker: FC<ServicePickerProps> = ({ onClose, services }) => {
                 }}
               >
                 Continue to payment
-              </Button>
-              <Button type="submit" className="w-[176px]">
-                Add another service
               </Button>
             </div>
           </form>
@@ -441,6 +494,7 @@ const ServicePicker: FC<ServicePickerProps> = ({ onClose, services }) => {
               type="button"
               className="w-[164px]"
               isLoading={res.loading}
+              disabled={!duration || selectedCard === ""}
               onClick={() => {
                 // console.log(
                 //   recurring,

@@ -11,6 +11,7 @@ interface ServiceCardProps {
   frequency: string;
   currency: string;
   setChooseService: (val: any) => void;
+  setPickedServices: () => void;
 }
 
 const ServiceCard: FC<ServiceCardProps> = ({
@@ -21,6 +22,7 @@ const ServiceCard: FC<ServiceCardProps> = ({
   subscription,
   frequency,
   currency,
+  setPickedServices,
   setChooseService,
 }) => {
   const router = useRouter();
@@ -54,6 +56,7 @@ const ServiceCard: FC<ServiceCardProps> = ({
         <button
           onClick={() => {
             setChooseService(true);
+            setPickedServices()
           }}
           className="bg-[#071A7E] text-white py-2 px-4 rounded-[4px] font-medium text-[14px] leading-[20px] h-[36px]"
         >

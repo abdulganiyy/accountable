@@ -31,6 +31,7 @@ const Page = () => {
   const [chooseService, setChooseService] = useState<any>(false);
   const [services, setServices] = useState<any>([]);
   const [subscriptions, setSubscriptions] = useState<any>([]);
+    const [pickedServices, setPickedServices] = useState<any>([]);
 
   const res = useQuery(GET_SERVICES, {
     variables: {
@@ -131,6 +132,7 @@ const Page = () => {
                     frequency={frequency}
                     currency={currency}
                     setChooseService={setChooseService}
+                    setPickedServices={()=>setPickedServices([item])}
                   />
                 );
               })
@@ -150,6 +152,8 @@ const Page = () => {
           services={services.filter(
             (service: any) => service?.subscription === true
           )}
+          pickedServices={pickedServices}
+          setPickedServices={setPickedServices}
         />
       )}
       <ToastContainer />

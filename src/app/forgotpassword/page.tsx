@@ -37,7 +37,7 @@ export default function ForgotPassword() {
     onError: (error) => {
       console.log(error.message);
       setError(error.message);
-    },
+    }
   });
 
   const router = useRouter();

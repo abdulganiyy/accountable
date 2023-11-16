@@ -21,6 +21,8 @@ export const GET_USER = gql`
           phone
           manager {
             email
+            lastName
+            firstName
           }
           appointment
           onboarded
