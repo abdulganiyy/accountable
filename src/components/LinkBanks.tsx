@@ -99,12 +99,14 @@ const LinkBanks: FC<LinkBanksProps> = ({ onClose, successHandler }) => {
             accountOptions
           );
           const accountData: any = await accountResponse.json();
+          console.log(accountData);
           const accountDataObj = {
             account_name: accountData.account.name,
             customer_id: accountData.account._id,
             account_number: accountData.account.accountNumber,
-            account_id: code,
+            account_id: accountData.account._id,
             bank_id: selectedBank.id,
+            currency: accountData.account.currency,
           };
 
           linkBanks({
@@ -115,9 +117,10 @@ const LinkBanks: FC<LinkBanksProps> = ({ onClose, successHandler }) => {
                     accountName: accountData.account.name,
                     customerId: accountData.account._id,
                     accountNumber: accountData.account.accountNumber,
-                    accountId: code,
+                    accountId: accountData.account._id,
                     bankId: selectedBank.id,
                     provider: selectedBank.integrator?.toUpperCase(),
+                    currency: accountData.account.currency,
                   },
                 ],
               },
