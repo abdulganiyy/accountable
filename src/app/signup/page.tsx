@@ -40,7 +40,7 @@ const schema = yup.object({
 });
 
 export default function Home() {
-  const [formStep, setFormStep] = useState(0);
+  const [formStep, setFormStep] = useState(1);
   const searchParams = useSearchParams();
 
   const code = searchParams?.get("code");
@@ -56,6 +56,15 @@ export default function Home() {
     trigger,
     formState: { errors, isValid, isSubmitting },
   } = useForm({
+    defaultValues: {
+      type: "MICRO_ENTERPRISE",
+      firstName: "",
+      lastName: "",
+      email: "",
+      companyName: "",
+      website: "",
+      password: "",
+    },
     resolver: yupResolver(schema),
     mode: "onBlur",
   });
