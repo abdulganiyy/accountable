@@ -672,3 +672,52 @@ export const LINKED_ACCOUNTS = gql`query LinkedAccounts($input: AccountsFilter) 
     }
   }
 }`
+
+export const INVOICE_DETAILS = gql`
+  query invoice($input: InvoiceInput!) {
+    invoice(input: $input) {
+      ... on ResponseWithInvoice {
+        data {
+          id
+          initiator {
+            firstName
+            lastName
+            email
+          }
+          items {
+            key
+            name
+            price
+            occurrence
+            recurring
+            service {
+              id
+              name
+              price
+              currency
+              frequency
+              description
+              subscription
+              subscribers
+            }
+          }
+          amount
+          currency
+          number
+          paid
+          recurring
+          subscription
+          cancelled
+          checksum
+          createdAt
+          updatedAt
+        }
+      }
+      ... on Error {
+        message
+        code
+        status
+      }
+    }
+  }
+`;

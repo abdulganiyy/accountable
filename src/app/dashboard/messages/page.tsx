@@ -89,6 +89,8 @@ const Page = () => {
   const [filesreports, setFilesReports] = useState<any>([]);
   const [page, setPage] = useState<number>(1);
   const [pages, setPages] = useState<number>(0);
+  const [isSending, setIsSending] = useState(false);
+
 
   const { data: subscriptionData, error } = useSubscription(NEW_MESSAGE, {
     variables: {
@@ -121,62 +123,68 @@ const Page = () => {
 
   const handleInputChange = (e: any) => {
     const selected = e.target.files[0];
-    // console.log(selected);
+    console.log(selected);
     setSelectedFile(selected);
   };
 
-  useEffect(() => {
-    // console.log(selectedFile);
+  //aws implementation
+  // useEffect(() => {
+  //   // console.log(selectedFile);
 
-    const uploadFile = async () => {
-      if (!selectedFile) return;
+  //   const uploadFile = async () => {
+  //     if (!selectedFile) return;
 
-      try {
-        const s3 = new S3({
-          accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID,
-          secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY,
-          region: process.env.NEXT_PUBLIC_AWS_S3_REGION_NAME,
-        });
+  //     try {
+  //       const s3 = new S3({
+  //         accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID,
+  //         secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY,
+  //         region: process.env.NEXT_PUBLIC_AWS_S3_REGION_NAME,
+  //       });
 
-        const initialFileName = selectedFile.name.replace(/\s/g, "");
-        const fileNameParts = initialFileName.split(".");
-        const fileName = fileNameParts[0]; // File name without extension
-        const fileExtension = fileNameParts[1]; // File extension
+  //       const initialFileName = selectedFile.name.replace(/\s/g, "");
+  //       const fileNameParts = initialFileName.split(".");
+  //       const fileName = fileNameParts[0]; // File name without extension
+  //       const fileExtension = fileNameParts[1]; // File extension
 
-        // Generate a random string
-        const randomString = String(Date.now()); // Replace with your random string generation logic
+  //       // Generate a random string
+  //       const randomString = String(Date.now()); // Replace with your random string generation logic
 
-        // Create the new file name with the random string appended
-        const newFileName = `${fileName}${randomString}.${fileExtension}`;
+  //       // Create the new file name with the random string appended
+  //       const newFileName = `${fileName}${randomString}.${fileExtension}`;
 
-        // Define the S3 bucket name and key for the uploaded file
-        const bucketName = "monehqapi-publics";
-        const key = `upload/${newFileName}`;
+  //       // Define the S3 bucket name and key for the uploaded file
+  //       const bucketName = "monehqapi-publics";
+  //       const key = `upload/${newFileName}`;
 
-        // Prepare the parameters for the upload
-        const params: S3.Types.PutObjectRequest = {
-          Bucket: bucketName,
-          Key: key,
-          Body: selectedFile,
-          ACL: "public-read", // Set the ACL to make the uploaded file publicly accessible
-        };
+  //       // Prepare the parameters for the upload
+  //       const params: S3.Types.PutObjectRequest = {
+  //         Bucket: bucketName,
+  //         Key: key,
+  //         Body: selectedFile,
+  //         ACL: "public-read", // Set the ACL to make the uploaded file publicly accessible
+  //       };
 
-        // Upload the file to AWS S3
-        await s3.upload(params).promise();
+  //       // Upload the file to AWS S3
+  //       await s3.upload(params).promise();
 
-        // Generate the file link using the bucket name and key
-        const fileLink = `https://${bucketName}.s3.amazonaws.com/${key}`;
+  //       // Generate the file link using the bucket name and key
+  //       const fileLink = `https://${bucketName}.s3.amazonaws.com/${key}`;
 
-        // const link = await uploadToAWSAndGetLink(selectedFile);
-        console.log(fileLink);
-        setFile({ name: fileName, ext: fileExtension, link: fileLink });
-      } catch (error: any) {
-        console.log(error.message);
-      }
-    };
+  //       // const link = await uploadToAWSAndGetLink(selectedFile);
+  //       console.log(fileLink);
+  //       setFile({ name: fileName, ext: fileExtension, link: fileLink });
+  //       // setMessages((prev:any) => {
+  //       //   [...prev, {
+            
+  //       //   }]
+  //       // })
+  //     } catch (error: any) {
+  //       console.log(error);
+  //     }
+  //   };
 
-    // uploadFile();
-  }, [selectedFile, setFile]);
+  //   uploadFile();
+  // }, [selectedFile, setFile]);
 
   useEffect(() => {
     const storedUser = localStorage?.getItem("userData");
@@ -223,7 +231,7 @@ const Page = () => {
     if (resp.data?.conversation?.code) {
       toast.error(resp.data?.conversation?.message);
     } else if (resp.data?.conversation?.data) {
-      // console.log(resp.data?.conversations?.data);
+      console.log(resp.data?.conversations?.data);
       setMessages(resp.data?.conversation?.data);
       setText("");
       messagesRef?.current?.scrollIntoView();
@@ -272,6 +280,7 @@ const Page = () => {
       // const { data } = await sendMessage({ variables: { text: messageText } });
 
       if (!text) return;
+      setIsSending(true);
 
       if (userType === "manager") {
         const { data } = await conversate({
@@ -289,6 +298,7 @@ const Page = () => {
         if (data && data.conversate?.data) {
           // If the message was sent successfully, clear the text field
           setText("");
+          console.log(data.conversate?.data);
           setMessages((prevMessages: any) => [
             ...prevMessages,
             data.conversate?.data,
@@ -302,8 +312,19 @@ const Page = () => {
       }
     } catch (error) {
       console.error("Error sending message:", error);
+    } finally {
+      setIsSending(false);
     }
   };
+
+  useEffect(() => {
+    console.log("conversations are",conversations);
+    setConversation(conversations[0]);
+  });
+
+  useEffect(() => {
+     console.log("convo is", conversation);
+  }, [conversation]);
 
   let officer = conversation?.participants?.find(
     (participant: any) => participant?.email !== user?.email
@@ -328,6 +349,7 @@ const Page = () => {
                 onClick={() => {
                   setUserType("manager");
                   setConversation(conversation);
+                 
                 }}
                 className={`cursor-pointer relative flex gap-x-3 p-4 items-center text-[#3B3C41] shadow-[0_0_0_1px_#E7E7E7] ${
                   userType === "manager" ? "bg-white text-[#071A7E]" : ""
@@ -339,7 +361,8 @@ const Page = () => {
                   height={40}
                   width={40}
                 />{" "}
-                Account Manager
+                {`${officer?.firstName} ${officer?.lastName}` ||
+                  "Bimbo Ademoye"}
                 {userType === "manager" && (
                   <span className="absolute w-1 h-10 left-[-1px] bg-[#071A7E] rounded-r-[20px]"></span>
                 )}
@@ -365,7 +388,7 @@ const Page = () => {
             <span className="absolute w-1 h-10 left-[-1px] bg-[#071A7E] rounded-r-[20px]"></span>
           )}
         </div> */}
-        <div
+        {/* <div
           onClick={() => {
             setUserType("ai");
           }}
@@ -383,7 +406,7 @@ const Page = () => {
           {userType === "ai" && (
             <span className="absolute w-1 h-10 left-[-1px] bg-[#071A7E] rounded-r-[20px]"></span>
           )}
-        </div>
+        </div> */}
       </div>
       {userType === "" ? (
         <div className="shadow-[0_0_0_1px_#E7E7E7] h-screen flex flex-col items-center justify-center px-2 gap-y-6">
@@ -528,25 +551,26 @@ const Page = () => {
               </div>
               {/* textbox */}
               <div className="h-[80px] shadow-[0_0_0_1px_#E7E7E7] bg-white pl-4 flex gap-x-2">
-                <input
-                  id="upload"
-                  className="hidden"
-                  type="file"
-                  // accept=".xlsx"
-                  onChange={handleInputChange}
-                />
-                <span className="self-center">{file?.ext}</span>
-                <label className="self-center cursor-pointer">
+                <label htmlFor="upload" className="cursor-pointer flex items-center justify-center">
                   <Paperclip size={23} />
+                  <input
+                    id="upload"
+                    className="hidden"
+                    type="file"
+                    onChange={handleInputChange}
+                  />
                 </label>
+                <span className="self-center">{file?.ext}</span>
+              
                 <div className="h-[80px] bg-white p-3 w-full">
                   <div className="cursor-pointer rounded-[100px] p-4 relative border-[1px] border-[#ABAEB4]">
-                    <span
+                    <button
+                      disabled={res.loading || isSending}
                       onClick={sendMessageHandler}
                       className="absolute right-2 top-2 w-[40px] h-[40px] rounded-full flex items-center justify-center bg-[#071A7E] "
                     >
                       <PaperPlaneRight size={23} color="white" />
-                    </span>
+                    </button>
 
                     <input
                       className="bg-transparent outline-none placeholder:text-[#9597A0] w-full"
@@ -565,7 +589,7 @@ const Page = () => {
                     <FileReport item={item} key={i} />
                   ))
                 ) : (
-                  <div className="flex flex-col items-center justify-center px-2 gap-y-6">
+                  <div className="flex flex-col h-full items-center justify-center px-2 gap-y-6">
                     <Image
                       alt="report"
                       src="/emptychart.svg"
