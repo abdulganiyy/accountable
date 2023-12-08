@@ -29,21 +29,26 @@ import {
   GET_USER,
   FINANCIAL_SUMMARY,
   LINKED_ACCOUNTS,
+  GET_ACCOUNT_MANAGER,
 } from "@/graphql/queries";
 import { useQuery } from "@apollo/client";
 import FinancialSummary from "@/components/FinancialSummary";
 import { BeatLoader } from "react-spinners";
 import { ToastContainer, toast } from "react-toastify";
+import Meeting from "@/components/Meeting";
+import moment from "moment";
+import link from "next/link";
+import next from "next/types";
+import { formatDateAndTime } from "@/utils";
 
 const Page = () => {
-    const videoRef = React.useRef(null);
-    const [videoFinished, setVideoFinished] = useState(true);
+  const videoRef = React.useRef(null);
+  const [videoFinished, setVideoFinished] = useState(true);
 
-    const handleVideoEnd = () => {
-      setVideoFinished(true);
-    };
-
-
+  const handleVideoEnd = () => {
+    setVideoFinished(true);
+  };
+  const [currentDate, setCurrentDate] = useState(moment());
   const [active, setActive] = useState(1);
   const [callScheduled, setCallScheduled] = useState(false);
   const [linkBanks, setLinkBanks] = useState(false);
@@ -58,9 +63,9 @@ const Page = () => {
   const { loading, data, error } = useQuery(GET_USER);
   const manager = data?.user?.data?.manager || null;
 
-    const financialSummaryQuery = useQuery(FINANCIAL_SUMMARY);
-    const summary = financialSummaryQuery?.data?.financialSummary?.data || null;
-  
+  const financialSummaryQuery = useQuery(FINANCIAL_SUMMARY);
+  const summary = financialSummaryQuery?.data?.financialSummary?.data || null;
+
   const result = useQuery(LINKED_ACCOUNTS, {
     variables: {
       input: {
@@ -68,11 +73,12 @@ const Page = () => {
       },
     },
     onCompleted(data) {
-      console.log("linked account",data);
+      console.log("linked account", data);
+      sessionStorage.setItem("isLinkedAccount", "true");
     },
     onError(error) {
       console.log(error);
-    }
+    },
   });
 
   useEffect(() => {
@@ -106,6 +112,24 @@ const Page = () => {
   //   };
   // }, [accountLinked, timerId]);
 
+  const {
+    loading: meetingLoading,
+    data: meetingData,
+    error: meetingError,
+    refetch: refetchMeetings,
+  } = useQuery(GET_ACCOUNT_MANAGER, {
+    variables: {
+      input: { month: currentDate.month(), year: currentDate.year() },
+    },
+  });
+  console.log(meetingData);
+  const meetings = meetingData?.getAccountManagerCalendar?.data?.meetings;
+  console.log("meetings", meetings);
+  const nextMeeting = meetings?.filter((event: any) => {
+     return event?.summary?.includes("Meet Your Account Manager");
+   })[0];
+   console.log("next meeting",nextMeeting);
+
   if (loading || result.loading || financialSummaryQuery.loading)
     return (
       <div className="h-full flex items-center justify-center">
@@ -115,7 +139,7 @@ const Page = () => {
 
   return (
     <>
-      {!result?.data?.linkedAccounts?.data.length ? (
+      {!result?.data?.linkedAccounts?.data?.length ? (
         <div>
           <div>
             <h3 className="font-extrabold text-[28px] leading-[42px] text-[#060809]">
@@ -339,18 +363,18 @@ const Page = () => {
               </p>
             </div>
             <div className="bg-white flex items-center gap-x-2 px-5 py-4 rounded-[16px]">
-              <span className="w-[40px] h-[40px] flex items-center justify-center bg-[#FAEAD4] rounded-full">
-                C
+              <span className="w-[40px] h-[40px] flex items-center justify-center font-bold text-2xl bg-[#FAEAD4] rounded-full">
+                {manager?.firstName?.charAt(0) || "M"}
               </span>
               <div className="flex flex-col">
-                <span>
+                <span className="text-[#060709] font-semibold text-[16px] leading-[23px]">
                   {manager?.firstName} {manager?.lastName}
                 </span>
-                <span>Your account manager</span>
+                <span className="text-[#414141] text-[14px] leading-[20px]">Your account manager</span>
               </div>
-              <span className="w-[32px] h-[32px] flex items-center justify-center rounded-full border-[1px] border-[#EAEDEF]">
+              {/* <span className="w-[32px] h-[32px] flex items-center justify-center rounded-full border-[1px] border-[#EAEDEF]">
                 <CaretDown size={16} />
-              </span>
+              </span> */}
             </div>
           </div>
           {!trialBalanced ? (
@@ -386,24 +410,55 @@ const Page = () => {
                   New Meeting
                 </span>
               </div>
-              <div className="flex flex-col items-center justify-center px-2 pt-6 gap-y-10">
-                <Image
-                  alt="calendar-icon"
-                  src="/calendar-icon.svg"
-                  height={72}
-                  width={72}
-                />
-                <div className="text-center">
-                  <p className="text-[14px] leading-[22px] max-w-[338px] pt-4">
-                    You can schedule a call with your account to complete setup
-                  </p>
-                  <span className="mx-auto block w-[184px] pt-[40px]">
-                    <Button className="border-[2px] border-[#00085A] bg-white text-[#00085A]">
-                      Book first meeting
-                    </Button>
-                  </span>
+              {nextMeeting ? (
+                <div className="flex flex-col items-center justify-center px-2 pt-6 gap-y-10">
+                  <Image
+                    alt="calendar-icon"
+                    src="/calendar-icon.svg"
+                    height={72}
+                    width={72}
+                  />
+                  <div className="text-center">
+                    <p className="text-[14px] leading-[22px] max-w-[338px] pt-4">
+                      Your next meeting is scheduled for{" "}
+                    </p>
+                    <span className="text-[#00085A] text-[14px] leading-[22px] max-w-[338px] font-semibold">
+                      {formatDateAndTime(nextMeeting?.start?.dateTime).date} @
+                      {formatDateAndTime(nextMeeting?.start?.dateTime).time}
+                    </span>
+                    <span className="mx-auto block w-[184px] pt-[40px]">
+                      <Button
+                        className="border-[2px] border-[#00085A] bg-white text-[#00085A]"
+                        onClick={() => {
+                          window.open(nextMeeting?.hangoutLink, "_blank");
+                        }}
+                      >
+                        Join Meeting
+                      </Button>
+                    </span>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center px-2 pt-6 gap-y-10">
+                  <Image
+                    alt="calendar-icon"
+                    src="/calendar-icon.svg"
+                    height={72}
+                    width={72}
+                  />
+                  <div className="text-center">
+                    <p className="text-[14px] leading-[22px] max-w-[338px] pt-4">
+                      You can schedule a call with your account to complete
+                      setup
+                    </p>
+                    <span className="mx-auto block w-[184px] pt-[40px]">
+                      <Button className="border-[2px] border-[#00085A] bg-white text-[#00085A]">
+                        Book first meeting
+                      </Button>
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
             <div className="h-[384px] bg-white border-[1px] border-[#E6E6E6] rounded-2xl">
               <div className="h-[52px] flex justify-between items-center px-6 border-b-[1px] border-[#EAEDEF]">

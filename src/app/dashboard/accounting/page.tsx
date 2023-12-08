@@ -20,6 +20,7 @@ import {
   ArrowRight,
   Coins,
   ArrowDown,
+  FileCsv,
 } from "@phosphor-icons/react";
 import { Portal } from "@/components/Portal";
 import { useForm } from "react-hook-form";
@@ -57,6 +58,7 @@ import CustomDatePicker from "@/components/inputs/CustomDatePicker";
 import LinkBanks from "@/components/LinkBanks";
 import { handleCSVExport } from "@/utils/csvExport";
 import { BeatLoader } from "react-spinners";
+import { formatNumberWithCommas } from "@/utils";
 
 ChartJS.register(ArcElement);
 
@@ -177,7 +179,7 @@ const Statements = ({
   // const [activeStatement, setActiveStatement] = useState("overview");
   const [more, setMore] = useState("");
   const [chartType, setChartType] = useState("line");
-  console.log(statements);
+
 
   return (
     <div className="mt-[45px]">
@@ -530,6 +532,9 @@ const Statements = ({
               </div>
               {/* commented the chart and moved it to the bottom */}
               <div className="p-6">
+                <div className="flex items-center justify-end px-4 mb-2">
+                  <p>₦</p>
+                </div>
                 <table className="w-full">
                   {statements?.SPL?.items?.map((item: any, i: number) => {
                     return (
@@ -541,7 +546,7 @@ const Statements = ({
                           {item?.element}
                         </td>
                         <td className="px-3.5 py-3 text-right">
-                          ₦{item?.value}
+                          {formatNumberWithCommas(item?.value)}
                         </td>
                       </tr>
                     );
@@ -732,6 +737,9 @@ const Statements = ({
               </div>
               {/* commented the chart and moved to the bottom */}
               <div className="p-6">
+                <div className="flex items-center justify-end px-4 mb-2">
+                  <p>₦</p>
+                </div>
                 <table className="w-full">
                   {statements?.SFP?.items?.map((item: any, i: number) => {
                     return (
@@ -743,7 +751,7 @@ const Statements = ({
                           {item?.element}
                         </td>
                         <td className="px-3.5 py-3 text-right">
-                          ₦{item?.value}
+                          {formatNumberWithCommas(item?.value)}
                         </td>
                       </tr>
                     );
@@ -934,6 +942,9 @@ const Statements = ({
               </div>
               {/* commented the chart and moved to the bottom */}
               <div className="p-6">
+                <div className="flex items-center justify-end px-4 mb-2">
+                  <p>₦</p>
+                </div>
                 <table className="w-full">
                   {statements?.SCF?.items?.map((item: any, i: number) => {
                     return (
@@ -945,7 +956,7 @@ const Statements = ({
                           {item?.element}
                         </td>
                         <td className="px-3.5 py-3 text-right">
-                          ₦{item?.value}
+                          {formatNumberWithCommas(item?.value)}
                         </td>
                       </tr>
                     );
@@ -1359,9 +1370,7 @@ const Page = () => {
   // const [trialBalance, setTrialBalance] = useState<any>(null);
   const [trialBalanceBreakdown, setTrialBalanceBreakdown] = useState<any>(null);
   const [statements, setStatements] = useState(null);
-    const [linkBanks, setLinkBanks] = useState(false);
-
-
+  const [linkBanks, setLinkBanks] = useState(false);
 
   const { loading, data, error } = useQuery(EXTRACT_TRIAL_BALANCE, {
     variables: { input: { year: 2023 } },
@@ -1397,8 +1406,8 @@ const Page = () => {
           year: 2022,
         },
       },
-    });  
-  },[])
+    });
+  }, []);
 
   // useEffect(() => {
   //   console.log(data);
@@ -1423,11 +1432,8 @@ const Page = () => {
   const [extractStatements, res] = useLazyQuery(EXTRACT_STATEMENTS, {});
 
   useEffect(() => {
-    console.log(res?.data);
     if (res?.data?.extractFinancialStatement?.code) {
-      console.log(res?.data?.extractFinancialStatement?.code);
     } else if (res?.data?.extractFinancialStatement?.data) {
-      console.log(res?.data?.extractFinancialStatement?.data["2022"]);
       setShowStatements(true);
       setStatements(res?.data?.extractFinancialStatement?.data["2022"]);
       // setTrialBalanceBreakdown(res?.data?.extractFinancialStatement?.data?.results);
@@ -1435,7 +1441,7 @@ const Page = () => {
   }, [res]);
 
   const onSubmit = (data: any) => {
-    console.log(data);
+   
     // generateStatements({
     //   variables: {
     //     input: {
@@ -1449,33 +1455,68 @@ const Page = () => {
     setShowTimePicker(false);
   };
 
-  console.log(trialBalance);
   // console.log(trialBalanceBreakdown);
 
- if (loading )
-   return (
-     <div className="h-full flex items-center justify-center">
-       <BeatLoader />
-     </div>
-   );
+  const linkedAccount =
+    typeof window !== "undefined"
+      ? sessionStorage.getItem("isLinkedAccount")
+      : null;
+
+  if (loading)
+    return (
+      <div className="h-full flex items-center justify-center">
+        <BeatLoader />
+      </div>
+    );
 
   return (
     <>
       {!trialBalance && !loading ? (
-        <div className="flex justify-between items-center">
-          <div>
-            <h3 className="font-extrabold text-[28px] leading-[41px] text-[#060809]">
-              Accounting
-            </h3>
-            <p className="text-[#4C5259] text-[16px] leading-[23px]">
-              Kindly contact your account manager to access your financial
-              statement
-            </p>
-          </div>
-          {/* <Button className="border-[2px] border-[#00085A] bg-white text-[#00085A] w-[156px]">
-            Link a new bank
-          </Button> */}
-        </div>
+        <>
+          {linkedAccount && linkedAccount === "true" ? (
+            <>
+              <h3 className="font-extrabold text-[28px] leading-[41px] text-[#060809]">
+                Accounting
+              </h3>
+              <div className="flex gap-x-2 p-4 border-[1px] border-[#B3B5CE] border-dashed mt-6 rounded-[4px]">
+                <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] rounded-[8px] flex items-center justify-center">
+                  <Info size={20} />
+                </span>
+                <div>
+                  <div className="text-[#060709] font-semibold text-[16px] leading-[23px]">
+                    Processing your account statements
+                  </div>
+                  <div className="text-[#414141] text-[14px] leading-[20px]">
+                    We re preparing your account statements to provide you with
+                    an overview. You will see all your balances, spending, and
+                    deposits in detail. This information will help you
+                    understand your finances better and make smart decisions.
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <h3 className="font-extrabold text-[28px] leading-[41px] text-[#060809]">
+                Accounting
+              </h3>
+              <div className="flex gap-x-2 p-4 border-[1px] border-[#B3B5CE] border-dashed mt-6 rounded-[4px]">
+                <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] rounded-[8px] flex items-center justify-center">
+                  <Info size={20} />
+                </span>
+                <div>
+                  <div className="text-[#060709] font-semibold text-[16px] leading-[23px]">
+                    You have no account statements yet.
+                  </div>
+                  <div className="text-[#414141] text-[14px] leading-[20px]">
+                    Kindly contact your account manager to access your financial
+                    statement
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+        </>
       ) : (
         <div>
           <div className="flex justify-between items-center">
@@ -1488,11 +1529,12 @@ const Page = () => {
                 health
               </p>
             </div>
-              <Button className="border-[2px] border-[#00085A] bg-white text-[#00085A] w-[156px]"
-                onClick={() => {
-                  setLinkBanks(true);
-                }}
-              >
+            <Button
+              className="border-[2px] border-[#00085A] bg-white text-[#00085A] w-[156px]"
+              onClick={() => {
+                setLinkBanks(true);
+              }}
+            >
               Link a new bank
             </Button>
           </div>
@@ -1590,10 +1632,14 @@ const Page = () => {
                                         </span>
                                       </td>
                                       <td className="px-3.5 py-3 text-right">
-                                        {account_type?.debit}
+                                        {formatNumberWithCommas(
+                                          account_type?.debit
+                                        )}
                                       </td>
                                       <td className="px-3.5 py-3 text-right">
-                                        {account_type?.credit}
+                                        {formatNumberWithCommas(
+                                          account_type?.credit
+                                        )}
                                       </td>
                                     </tr>
                                   );
@@ -1603,10 +1649,10 @@ const Page = () => {
                                     Total {element}
                                   </td>
                                   <td className="px-3.5 py-3 text-right">
-                                    {debit}
+                                    {formatNumberWithCommas(debit)}
                                   </td>
                                   <td className="px-3.5 py-3 text-right">
-                                    {credit}
+                                    {formatNumberWithCommas(credit)}
                                   </td>
                                 </tr>
                                 <tr className="">
@@ -1623,10 +1669,10 @@ const Page = () => {
                           All Account Total
                         </td>
                         <td className="px-3.5 py-3 text-right">
-                          {trialBalance?.debit}
+                          {formatNumberWithCommas(trialBalance?.debit)}
                         </td>
                         <td className="px-3.5 py-3 text-right">
-                          {trialBalance?.credit}
+                          {formatNumberWithCommas(trialBalance?.credit)}
                         </td>
                       </tr>
                     </tbody>
@@ -1913,48 +1959,46 @@ const Page = () => {
 
 export default Page;
 
-
-
-  // <div className="p-6 grid grid-cols-3 gap-x-6">
-  //   <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
-  //     <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
-  //       <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
-  //         <Coins size={20} />
-  //       </span>
-  //       <span className="font-medium text-[14px] leading-[20px] text-[#4C5259] flex items-center gap-x-1">
-  //         Revenue <Info />
-  //       </span>
-  //       <span className="font-semibold text-[24px] leading-[35px] text-[#021645]">
-  //         {"₦ XXX"}
-  //       </span>
-  //     </div>
-  //   </div>
-  //   <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
-  //     <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
-  //       <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
-  //         <ArrowDown size={20} />
-  //       </span>
-  //       <span className="font-medium text-[14px] leading-[20px] text-[#4C5259] flex items-center gap-x-1">
-  //         Net Income <Info />
-  //       </span>
-  //       <span className="font-semibold text-[24px] leading-[35px] text-[#021645]">
-  //         {/* ₦70,000.01 */}
-  //         {"₦ XXX"}
-  //       </span>
-  //     </div>
-  //   </div>
-  //   <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
-  //     <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
-  //       <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
-  //         <Money size={20} />
-  //       </span>
-  //       <span className="font-medium text-[14px] leading-[20px] text-[#4C5259] flex items-center gap-x-1">
-  //         Expenses <Info />
-  //       </span>
-  //       <span className="font-semibold text-[24px] leading-[35px] text-[#021645]">
-  //         {/* ₦50,000.00 */}
-  //         {"₦ XXX"}
-  //       </span>
-  //     </div>
-  //   </div>
-  // </div>;
+// <div className="p-6 grid grid-cols-3 gap-x-6">
+//   <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
+//     <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
+//       <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
+//         <Coins size={20} />
+//       </span>
+//       <span className="font-medium text-[14px] leading-[20px] text-[#4C5259] flex items-center gap-x-1">
+//         Revenue <Info />
+//       </span>
+//       <span className="font-semibold text-[24px] leading-[35px] text-[#021645]">
+//         {"₦ XXX"}
+//       </span>
+//     </div>
+//   </div>
+//   <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
+//     <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
+//       <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
+//         <ArrowDown size={20} />
+//       </span>
+//       <span className="font-medium text-[14px] leading-[20px] text-[#4C5259] flex items-center gap-x-1">
+//         Net Income <Info />
+//       </span>
+//       <span className="font-semibold text-[24px] leading-[35px] text-[#021645]">
+//         {/* ₦70,000.01 */}
+//         {"₦ XXX"}
+//       </span>
+//     </div>
+//   </div>
+//   <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
+//     <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
+//       <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
+//         <Money size={20} />
+//       </span>
+//       <span className="font-medium text-[14px] leading-[20px] text-[#4C5259] flex items-center gap-x-1">
+//         Expenses <Info />
+//       </span>
+//       <span className="font-semibold text-[24px] leading-[35px] text-[#021645]">
+//         {/* ₦50,000.00 */}
+//         {"₦ XXX"}
+//       </span>
+//     </div>
+//   </div>
+// </div>;

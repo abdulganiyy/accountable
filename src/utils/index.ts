@@ -1699,3 +1699,32 @@ export const truncateStr = (str: string, len: number) => {
 
   return str.slice(0, len) + "...";
 };
+
+export const formatNumberWithCommas = (num: number) => {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+export function formatDateAndTime(inputString:string) {
+    // Create a new Date object using the input string
+    const dateTime = new Date(inputString);
+
+    // Extract date components
+    const year = dateTime.getFullYear();
+    const month = String(dateTime.getMonth() + 1).padStart(2, '0');
+    const day = String(dateTime.getDate()).padStart(2, '0');
+
+    // Extract time components
+    const hours = String(dateTime.getHours()).padStart(2, '0');
+    const minutes = String(dateTime.getMinutes()).padStart(2, '0');
+    const seconds = String(dateTime.getSeconds()).padStart(2, '0');
+
+    // Format the date and time strings
+    const formattedDate = `${year}-${month}-${day}`;
+    const formattedTime = `${hours}:${minutes}:${seconds}`;
+
+    // Return an object with formatted date and time
+    return {
+        date: formattedDate,
+        time: formattedTime
+    };
+}

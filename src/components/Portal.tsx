@@ -24,7 +24,7 @@ export const Portal = (props: PortalProps) => {
               onClick={props.onClose}
               className="absolute top-2 right-2 bg-[#999CBD] rounded-full text-white p-1 cursor-pointer"
             >
-              <X size={28} />
+              <X size={28}/>
             </span>
             {props.children}
           </div>
