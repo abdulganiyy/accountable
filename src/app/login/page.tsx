@@ -43,51 +43,33 @@ export default function Login() {
   const router = useRouter();
 
   const [login, result] = useMutation(LOGIN, {
+    onCompleted: (data) => {
+      if (data?.login?.data?.user?.emailVerified === false) {
+        reset();
+        router.push(
+          `/requestemailverification?email=${data?.login?.data?.user?.email}`
+        );
+      }else if (data?.login?.data?.user?.onboarded === false) {
+        localStorage.setItem("userToken", data?.login?.data?.token);
+        localStorage.setItem(
+          "userData",
+          JSON.stringify(data?.login?.data?.user)
+        );
+        router.push("/completeonboarding");
+      } else if (data?.login?.data?.token) {
+        localStorage.setItem("userToken", data?.login?.data?.token);
+        localStorage.setItem(
+          "userData",
+          JSON.stringify(data?.login?.data?.user)
+        );
+        router.push("/dashboard");
+      }
+    },
     onError: (error) => {
       setError(error.graphQLErrors[0]?.message);
     },
   });
 
-  useEffect(() => {
-    // console.log(result.data?.login?.data?.user?.emailVerified);
-
-    if (result.data?.login.message) {
-      toast.error(result.data?.login.message, { pauseOnHover: false });
-      reset();
-    } else if (result.data?.login?.data?.user?.emailVerified === false) {
-      reset();
-      router.push(
-        `/requestemailverification?email=${result.data?.login?.data?.user?.email}`
-      );
-    } else if (result.data?.login?.data?.user?.onboarded === false) {
-      localStorage.setItem("userToken", result.data?.login?.data?.token);
-      localStorage.setItem(
-        "userData",
-        JSON.stringify(result.data?.login?.data?.user)
-      );
-
-      router.push(
-        `/completeonboarding?type=${result.data?.login?.data?.user?.type}`
-      );
-    }
-    // else if (result.data?.login?.data?.user?.phoneVerified === false) {
-    //   localStorage.setItem("userToken", result.data?.login?.data?.token);
-    //   localStorage.setItem(
-    //     "userData",
-    //     JSON.stringify(result.data?.login?.data?.user)
-    //   );
-
-    //   router.push(`/otp`);
-    // }
-    else if (result.data?.login?.data?.token) {
-      localStorage.setItem("userToken", result.data?.login?.data?.token);
-      localStorage.setItem(
-        "userData",
-        JSON.stringify(result.data?.login?.data?.user)
-      );
-      router.push(`/dashboard`);
-    }
-  }, [result.data?.login, router, getValues, reset]);
 
   const onSubmit = async (data: any) => {
     login({
@@ -98,7 +80,7 @@ export default function Login() {
   return (
     <main className="min-h-screen bg-white">
       <Header text="Don’t have an account?" link="/signup" title="Sign Up" />
-      <div className="mx-auto px-2 w-[365px] mt-[32px] flex flex-col gap-y-2 mb-6">
+      <div className="mx-auto px-2 w-[90%] md:w-[400px] xl:w-[365px] mt-20 xl:mt-28 flex flex-col gap-y-2 mb-6">
         <h1 className="text-[#060809] font-medium text-[28px] leading-[39.2px]">
           Welcome Back!
         </h1>

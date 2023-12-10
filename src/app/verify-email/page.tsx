@@ -56,7 +56,7 @@ export default function VerifyEmail() {
     return (
       <div className="bg-white h-screen overflow-hidden">
         <Header />
-        <div className="flex flex-col pt-[80px] items-center h-full">
+        <div className="flex flex-col pt-[80px] items-center h-full px-3">
           <Image src="/verify-icon.svg" alt="Logo" width={160} height={160} />
           <div className="mt-[32px] text-[#060809] font-medium text-[28px] leading-[39px]">
             Verification successful

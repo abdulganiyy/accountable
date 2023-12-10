@@ -500,6 +500,9 @@ query GetSuscriptions($input: SubscriptionFilter!) {
         service {
           name
           description
+          id
+          price
+          currency
         }
       }
     }

@@ -192,8 +192,8 @@ const Page = () => {
 
   return (
     <div>
-      <div className="flex justify-between">
-        <div>
+      <div className="flex justify-between flex-wrap">
+        <div className="max-w-[500px]">
           <h3 className="font-extrabold text-[28px] leading-[42px] text-[#060809]">
             Meetings
           </h3>
@@ -214,7 +214,7 @@ const Page = () => {
 
       {hasEvent ? (
         <div className="min-h-[471px] bg-white border-[1px] border-[#E6E6E6] rounded-2xl mt-8">
-          <div className="h-[68px] flex justify-between items-center px-6 border-b-[1px] border-[#EAEDEF]">
+          <div className="h-[68px] flex justify-between items-center px-2 md:px-6 border-b-[1px] border-[#EAEDEF]">
             {currentDate.format("MMMM YYYY")}
             <div className="flex gap-x-1 items-center">
               <span
@@ -237,7 +237,7 @@ const Page = () => {
             </div>
           </div>
 
-          <div className="p-4 grid grid-cols-7">
+          <div className="p-2 md:p-4 grid grid-cols-7">
             {renderWeekdays()}
             {renderCalendarDays()}
           </div>

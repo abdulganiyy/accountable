@@ -72,7 +72,7 @@ export default function ResetPassword() {
   return (
     <main className="min-h-screen bg-white">
       <Header />
-      <div className="mx-auto px-2 w-[365px] mt-[32px] flex flex-col gap-y-2 mb-6">
+      <div className="mx-auto px-2 w-[90%] md:w-[400px] xl:w-[365px] mt-20 xl:mt-28 flex flex-col gap-y-2 mb-6">
         <h1 className="text-[#060809] font-medium text-[28px] leading-[39.2px]">
           Create new password
         </h1>
