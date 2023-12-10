@@ -104,7 +104,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-white">
       <Header />
-      <div className="mx-auto px-2 md:w-[405px] mt-[32px] flex flex-col gap-y-2 mb-6">
+      <div className="mx-auto px-2 w-[90%] md:w-[500px] lg:w-[405px] mt-12 xl:mt-16 flex flex-col gap-y-2 mb-6">
         <h1 className="text-[#060809] md:w-[345px] font-medium text-[28px] leading-[39.2px]">
           Complete Account Setup in 2 Minutes
         </h1>

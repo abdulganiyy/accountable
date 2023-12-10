@@ -73,8 +73,7 @@ const Page = () => {
       },
     },
     onCompleted(data) {
-      console.log("linked account", data);
-      sessionStorage.setItem("isLinkedAccount", "true");
+      console.log(data);
     },
     onError(error) {
       console.log(error);
@@ -84,13 +83,11 @@ const Page = () => {
   useEffect(() => {
     const storedUser = localStorage?.getItem("userData");
     if (storedUser) {
-      console.log(JSON.parse(storedUser));
       setUser(JSON.parse(storedUser));
     }
   }, []);
 
   useEffect(() => {
-    // console.log(data);
     if (data?.user?.code) {
       console.log(data?.user?.code);
     } else if (data?.user?.data) {
@@ -122,13 +119,13 @@ const Page = () => {
       input: { month: currentDate.month(), year: currentDate.year() },
     },
   });
-  console.log(meetingData);
+
   const meetings = meetingData?.getAccountManagerCalendar?.data?.meetings;
-  console.log("meetings", meetings);
+
   const nextMeeting = meetings?.filter((event: any) => {
      return event?.summary?.includes("Meet Your Account Manager");
    })[0];
-   console.log("next meeting",nextMeeting);
+ 
 
   if (loading || result.loading || financialSummaryQuery.loading)
     return (
@@ -155,7 +152,7 @@ const Page = () => {
               <div className="h-[471px] bg-white border-[1px] border-[#E6E6E6] rounded-2xl mt-8">
                 <div className="h-[68px] flex justify-between items-center px-6 border-b-[1px] border-[#EAEDEF]">
                   <div className="flex gap-x-4 items-center">
-                    <span>Get Started</span>
+                    <span className="hidden md:block">Get Started</span>
                     <span className="px-2 py-1 bg-[#F2F3F7] text-[#00085A]">
                       Step {active} out of 4
                     </span>
@@ -228,7 +225,7 @@ const Page = () => {
                         : "Invite your team members to join and manage your accounts together."}
                     </p>
                   </div>
-                  <div className="flex gap-x-2">
+                  <div className="flex flex-col md:flex-row gap-2">
                     {active === 1 ? (
                       <>
                         <Button
@@ -241,7 +238,7 @@ const Page = () => {
                           Start the guide
                         </Button>
                         <Button
-                          className="w-[184px] bg-white text-[#071A7E] border-[2px] border-[#EAEDEF]"
+                          className="w-[184px] bg-white text-[#071A7E] border-[2px] border-[#EAEDEF] md:mb-0 mb-3"
                           onClick={() => {
                             setActive(2);
                           }}
@@ -353,7 +350,7 @@ const Page = () => {
         </div>
       ) : (
         <div>
-          <div className="flex justify-between">
+          <div className="flex flex-wrap justify-between space-y-2">
             <div>
               <h3 className="font-extrabold text-[28px] leading-[42px] text-[#060809]">
                 Hello, {user?.firstName || ""} 🎉
@@ -370,7 +367,9 @@ const Page = () => {
                 <span className="text-[#060709] font-semibold text-[16px] leading-[23px]">
                   {manager?.firstName} {manager?.lastName}
                 </span>
-                <span className="text-[#414141] text-[14px] leading-[20px]">Your account manager</span>
+                <span className="text-[#414141] text-[14px] leading-[20px]">
+                  Your account manager
+                </span>
               </div>
               {/* <span className="w-[32px] h-[32px] flex items-center justify-center rounded-full border-[1px] border-[#EAEDEF]">
                 <CaretDown size={16} />
@@ -400,8 +399,8 @@ const Page = () => {
           ) : (
             <FinancialSummary summary={summary} />
           )}
-          <div className="mt-6 grid grid-cols-2 gap-x-6">
-            <div className="h-[384px] bg-white border-[1px] border-[#E6E6E6] rounded-2xl">
+          <div className="mt-6 grid grid-cols-2 gap-y-3 gap-x-6">
+            <div className="h-[384px] bg-white border-[1px] border-[#E6E6E6] rounded-2xl col-span-full md:col-span-1">
               <div className="h-[52px] flex justify-between items-center px-6 border-b-[1px] border-[#EAEDEF]">
                 <span className="font-medium text-[18px] leading-[26px]">
                   Scheduled Meetings
@@ -460,7 +459,7 @@ const Page = () => {
                 </div>
               )}
             </div>
-            <div className="h-[384px] bg-white border-[1px] border-[#E6E6E6] rounded-2xl">
+            <div className="h-[384px] bg-white border-[1px] border-[#E6E6E6] rounded-2xl col-span-full md:col-span-1">
               <div className="h-[52px] flex justify-between items-center px-6 border-b-[1px] border-[#EAEDEF]">
                 <span className="text-[18px] leading-[26px]">Reports</span>
               </div>

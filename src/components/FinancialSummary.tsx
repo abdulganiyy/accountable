@@ -25,9 +25,9 @@ const FinancialSummary = ({summary}:{summary:any}) => {
       <div className="h-[68px] flex justify-between items-center px-6 border-b-[1px] border-[#EAEDEF]">
         Financial Summary
       </div>
-      <div className="p-6">
-        <div className="grid grid-cols-[290px,1fr] gap-6">
-          <div className="border-[1px] border-[#E6E6E6] rounded-[16px] py-8 px-6">
+      <div className="p-4 xl:p-6">
+        <div className="grid grid-cols-9 gap-6">
+          <div className="border-[1px] border-[#E6E6E6] rounded-[16px] py-8 px-6 col-span-full md:col-span-3">
             <div className="flex flex-col gap-y-3 pb-12 border-b-[1px] border-[#E6E6E6] mb-12">
               <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
                 <Money size={20} />
@@ -77,8 +77,8 @@ const FinancialSummary = ({summary}:{summary:any}) => {
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-6">
-            <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
+          <div className="grid grid-cols-2 gap-6 col-span-full md:col-span-6">
+            <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6] col-span-full md:col-span-1">
               <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
                 <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
                   <PokerChip size={20} />
@@ -95,7 +95,7 @@ const FinancialSummary = ({summary}:{summary:any}) => {
                 </span>
               </div>
             </div>
-            <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
+            <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6] col-span-full md:col-span-1">
               <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
                 <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
                   <Bank size={20} />
@@ -112,7 +112,7 @@ const FinancialSummary = ({summary}:{summary:any}) => {
                 </span>
               </div>
             </div>{" "}
-            <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
+            <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6] col-span-full md:col-span-1">
               <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
                 <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
                   <Scales size={20} />
@@ -129,7 +129,7 @@ const FinancialSummary = ({summary}:{summary:any}) => {
                 </span>
               </div>
             </div>{" "}
-            <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6]">
+            <div className="border-[1px] border-[#E6E6E6] rounded-[16px] bg-[#E6E6E6] col-span-full md:col-span-1">
               <div className="py-8 px-6 rounded-t-[16px] flex flex-col gap-y-3 h-[93%] bg-white">
                 <span className="bg-[#F2F3F7] p-[6px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px]">
                   <Rocket size={20} />

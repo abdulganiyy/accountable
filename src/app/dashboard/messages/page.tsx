@@ -8,6 +8,7 @@ import {
   DownloadSimple,
   DotsThreeVertical,
   Eye,
+  XCircle
 } from "@phosphor-icons/react";
 import { useMutation, useQuery, useSubscription } from "@apollo/client";
 import {
@@ -19,7 +20,7 @@ import { CONVERSATE } from "@/graphql/mutations";
 import { NEW_MESSAGE } from "@/graphql/subscriptions";
 import { ToastContainer, toast } from "react-toastify";
 import moment from "moment";
-import { S3 } from "aws-sdk";
+import {uploadFile} from "./fragments/extra"
 import { useRouter } from "next/navigation";
 import { truncateStr } from "@/utils";
 import { twMerge } from "tailwind-merge";
@@ -77,11 +78,11 @@ const FileReport = ({ item }: any) => {
 };
 
 const Page = () => {
-  const [userType, setUserType] = useState("");
   const messagesRef = useRef<HTMLDivElement | null>(null);
   const [conversation, setConversation] = useState<any>(null);
   const [conversations, setConversations] = useState<any>([]);
   const [messages, setMessages] = useState<any>([]);
+  const [userType, setUserType] = useState("");
   const [user, setUser] = useState<any>(null);
   const [text, setText] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<any>(null);
@@ -89,21 +90,18 @@ const Page = () => {
   const [filesreports, setFilesReports] = useState<any>([]);
   const [page, setPage] = useState<number>(1);
   const [pages, setPages] = useState<number>(0);
-  const [isSending, setIsSending] = useState(false);
 
 
   const { data: subscriptionData, error } = useSubscription(NEW_MESSAGE, {
     variables: {
       input: {
-        // recipient: "649995b830ffef309062bf04",
         recipient: user?.id,
       },
     },
+
   });
 
   useEffect(() => {
-    // console.log(subscriptionData);
-
     if (subscriptionData) {
       console.log(subscriptionData?.newMessage?.message);
       setMessages((prevMessages: any) => [
@@ -113,78 +111,14 @@ const Page = () => {
     } else if (error) {
       console.log(error);
     }
-
-    // if (subscriptionData && subscriptionData.newMessage) {
-    //   console.log(subscriptionData);
-    //   // When a new message arrives through the subscription, add it to the list of messages
-    //   // setMessages((prevMessages:any) => [...prevMessages, subscriptionData.newMessage]);
-    // }
   }, [subscriptionData, error]);
+
 
   const handleInputChange = (e: any) => {
     const selected = e.target.files[0];
     console.log(selected);
     setSelectedFile(selected);
   };
-
-  //aws implementation
-  // useEffect(() => {
-  //   // console.log(selectedFile);
-
-  //   const uploadFile = async () => {
-  //     if (!selectedFile) return;
-
-  //     try {
-  //       const s3 = new S3({
-  //         accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID,
-  //         secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY,
-  //         region: process.env.NEXT_PUBLIC_AWS_S3_REGION_NAME,
-  //       });
-
-  //       const initialFileName = selectedFile.name.replace(/\s/g, "");
-  //       const fileNameParts = initialFileName.split(".");
-  //       const fileName = fileNameParts[0]; // File name without extension
-  //       const fileExtension = fileNameParts[1]; // File extension
-
-  //       // Generate a random string
-  //       const randomString = String(Date.now()); // Replace with your random string generation logic
-
-  //       // Create the new file name with the random string appended
-  //       const newFileName = `${fileName}${randomString}.${fileExtension}`;
-
-  //       // Define the S3 bucket name and key for the uploaded file
-  //       const bucketName = "monehqapi-publics";
-  //       const key = `upload/${newFileName}`;
-
-  //       // Prepare the parameters for the upload
-  //       const params: S3.Types.PutObjectRequest = {
-  //         Bucket: bucketName,
-  //         Key: key,
-  //         Body: selectedFile,
-  //         ACL: "public-read", // Set the ACL to make the uploaded file publicly accessible
-  //       };
-
-  //       // Upload the file to AWS S3
-  //       await s3.upload(params).promise();
-
-  //       // Generate the file link using the bucket name and key
-  //       const fileLink = `https://${bucketName}.s3.amazonaws.com/${key}`;
-
-  //       // const link = await uploadToAWSAndGetLink(selectedFile);
-  //       console.log(fileLink);
-  //       setFile({ name: fileName, ext: fileExtension, link: fileLink });
-  //       // setMessages((prev:any) => {
-  //       //   [...prev, {
-            
-  //       //   }]
-  //       // })
-  //     } catch (error: any) {
-  //       console.log(error);
-  //     }
-  //   };
-
-  //   uploadFile();
-  // }, [selectedFile, setFile]);
 
   useEffect(() => {
     const storedUser = localStorage?.getItem("userData");
@@ -193,7 +127,7 @@ const Page = () => {
     }
   }, []);
 
-  const resp = useQuery(MESSAGES, {
+  const {data:messagesData, error:messagesError,loading:messagesLoading} = useQuery(MESSAGES, {
     variables: {
       input: {
         // conversation: "650982e8fbbb0963e552658e",
@@ -205,40 +139,74 @@ const Page = () => {
     skip: !conversation,
   });
 
-  const res = useQuery(CONVERSATIONS, {
+  useEffect(() => {
+    console.log("massagesData",messagesData)
+    setMessages(messagesData?.conversation?.data);
+    setText("")
+  }, [messagesData])
+
+  useEffect(() => {
+    console.log("massagesError", messagesError)
+  }, [messagesError])
+  
+  
+    // useEffect(() => {
+    //   if (resp.data?.conversation?.code) {
+    //     toast.error(resp.data?.conversation?.message);
+    //   } else if (resp.data?.conversation?.data) {
+    //     console.log(resp.data?.conversation?.data);
+    //     setMessages(resp.data?.conversation?.data);
+    //     setText("");
+    //     messagesRef?.current?.scrollIntoView();
+    //   }
+    // }, [resp.data]);
+
+
+
+  const {data:conversationData, error:conversationError,loading:conversationLoading} = useQuery(CONVERSATIONS, {
     variables: {
       input: {
         limit: 100,
         sort: "asc",
       },
-    },
+    }
   });
 
   useEffect(() => {
-    console.log(res.data);
-
-    if (res.data?.conversations?.code) {
-      toast.error(res.data?.conversations?.message);
-    } else if (res.data?.conversations?.data) {
-      // console.log(res.data?.conversations?.data);
-      setConversations(res.data?.conversations?.data);
+    if (conversationData) {
+      console.log(conversationData?.conversations?.data);
+      const conversation = conversationData?.conversations?.data.filter(
+        (conversation: any) => {
+          return conversation.participants.find(
+            (participant: any) => participant?.email === user?.email
+          );
+        }
+      ) || []; 
+      setConversations(conversation);
     }
-  }, [res.data]);
+  }, [conversationData]);
 
   useEffect(() => {
-    // console.log(resp.data?.conversations);
-
-    if (resp.data?.conversation?.code) {
-      toast.error(resp.data?.conversation?.message);
-    } else if (resp.data?.conversation?.data) {
-      console.log(resp.data?.conversations?.data);
-      setMessages(resp.data?.conversation?.data);
-      setText("");
-      messagesRef?.current?.scrollIntoView();
+    if (conversationError) {
+      console.log(conversationError);
+      toast.error(conversationError?.message);
     }
-  }, [resp.data]);
+  },[conversationError]);
 
-  const [conversate] = useMutation(CONVERSATE);
+  // useEffect(() => {
+  //   console.log(res.data);
+
+  //   if (res.data?.conversations?.code) {
+  //     toast.error(res.data?.conversations?.message);
+  //   } else if (res.data?.conversations?.data) {
+  //     // console.log(res.data?.conversations?.data);
+  //     setConversations(res.data?.conversations?.data);
+  //   }
+  // }, [res.data]);
+
+
+
+
 
   // useEffect(() => {
   //   if (result.data?.conversate?.code) {
@@ -258,15 +226,10 @@ const Page = () => {
   // const router = useRouter();
 
   useEffect(() => {
-    // console.log(res.data?.retrieveActivityFeed);
-
     if (response.data?.getReportsAndFiles?.code) {
-      // responseet();
       toast.error(response.data?.getReportsAndFiles?.message);
     } else if (response.data?.getReportsAndFiles?.data) {
-      console.log(response.data?.getReportsAndFiles?.data);
       setFilesReports(response.data?.getReportsAndFiles?.data);
-      console.log(response.data?.getReportsAndFiles?.pagination);
       setPages(response.data?.getReportsAndFiles?.pagination?.pages);
     }
   }, [response.data]);
@@ -275,28 +238,9 @@ const Page = () => {
     messagesRef?.current?.scrollIntoView();
   }, [messages, userType]);
 
-  const sendMessageHandler = async () => {
-    try {
-      // const { data } = await sendMessage({ variables: { text: messageText } });
-
-      if (!text) return;
-      setIsSending(true);
-
-      if (userType === "manager") {
-        const { data } = await conversate({
-          variables: {
-            input: {
-              conversation: conversation?.id,
-              // recipient: "64891480434ce1b0d1e5a819",
-              text,
-            },
-          },
-        });
-
+    const [conversate,{loading:conversateLoading,error:conversateError}] = useMutation(CONVERSATE, {
+      onCompleted: (data) => {
         console.log(data);
-
-        if (data && data.conversate?.data) {
-          // If the message was sent successfully, clear the text field
           setText("");
           console.log(data.conversate?.data);
           setMessages((prevMessages: any) => [
@@ -304,71 +248,91 @@ const Page = () => {
             data.conversate?.data,
           ]);
 
-          // Notify the parent component that a message was sent
-          // if (onMessageSent) {
-          //   onMessageSent(data.sendMessage);
-          // }
-        }
+      },
+      onError: (error) => {
+        console.log(error);
+      }
+    });
+
+  const sendMessageHandler = async () => {
+    if (!text && !selectedFile) return;
+    
+    let file = null
+    if(selectedFile){
+      console.log("uploading file...")
+      file = await uploadFile(selectedFile);
+      console.log(file)
+    }
+
+    try {
+      // const { data } = await sendMessage({ variables: { text: messageText } });
+      if (userType === "manager") {
+        console.log(conversation.id)
+        await conversate({
+          variables: {
+            input: {
+              conversation: conversation?.id,
+              // recipient: "64891480434ce1b0d1e5a819",
+              text,
+              attachment:file ? [file?.link] : null,
+            },
+          },
+        }); 
       }
     } catch (error) {
       console.error("Error sending message:", error);
-    } finally {
-      setIsSending(false);
-    }
+    } 
   };
 
   useEffect(() => {
-    console.log("conversations are",conversations);
     setConversation(conversations[0]);
-  });
+    if (conversations[0]) {
+      setUserType("manager")
+    }
+  },[]);
 
-  useEffect(() => {
-     console.log("convo is", conversation);
-  }, [conversation]);
+
 
   let officer = conversation?.participants?.find(
     (participant: any) => participant?.email !== user?.email
   );
 
   return (
-    <div className="h-full grid grid-cols-[246px,1fr]">
-      <div>
-        <div className="p-6 font-semibold text-[20px] leading-[24px] text-[#060809]">
+    <div className="h-full  grid grid-cols-10 w-full  ">
+      {/* pane 1 */}
+      <div className=" col-span-2">
+        <div className="p-6 font-semibold text-[20px] leading-[24px] text-[#060809] hidden md:block">
           Messages
         </div>
-        {conversations
-          .filter((conversation: any) => {
-            return conversation.participants.find(
-              (participant: any) => participant?.email === user?.email
-            );
-          })
-          .map((conversation: any) => {
-            return (
-              <div
-                key={conversation?.id}
-                onClick={() => {
-                  setUserType("manager");
-                  setConversation(conversation);
-                 
-                }}
-                className={`cursor-pointer relative flex gap-x-3 p-4 items-center text-[#3B3C41] shadow-[0_0_0_1px_#E7E7E7] ${
-                  userType === "manager" ? "bg-white text-[#071A7E]" : ""
-                }`}
-              >
-                <Image
-                  alt="manager pic"
-                  src="/accountofficer.svg"
-                  height={40}
-                  width={40}
-                />{" "}
-                {`${officer?.firstName} ${officer?.lastName}` ||
-                  "Bimbo Ademoye"}
+        {conversations.map((conversation: any) => {
+          return (
+            <div
+              key={conversation?.id}
+              onClick={() => {
+                setUserType("manager");
+                setConversation(conversation);
+              }}
+              className={`cursor-pointer relative flex gap-x-3 p-4 items-center text-[#3B3C41] shadow-[0_0_0_1px_#E7E7E7] ${
+                userType === "manager" ? "bg-white text-[#071A7E]" : ""
+              }`}
+            >
+              <Image
+                alt="logo dashboard"
+                src="/logomain.svg"
+                height={40}
+                width={40}
+              />{" "}
+              <span className="hidden md:block">
+                {`${officer?.firstName || "Account"} ${
+                  officer?.lastName || "Manager"
+                }` || "Bimbo Ademoye"}
                 {userType === "manager" && (
                   <span className="absolute w-1 h-10 left-[-1px] bg-[#071A7E] rounded-r-[20px]"></span>
                 )}
-              </div>
-            );
-          })}
+              </span>
+            </div>
+          );
+        })}
         {/* <div
           onClick={() => {
             setUserType("manager");
@@ -408,8 +372,9 @@ const Page = () => {
           )}
         </div> */}
       </div>
+      {/* pane 2 */}
       {userType === "" ? (
-        <div className="shadow-[0_0_0_1px_#E7E7E7] h-screen flex flex-col items-center justify-center px-2 gap-y-6">
+        <div className="shadow-[0_0_0_1px_#E7E7E7] h-screen flex flex-col items-center justify-center px-2 gap-y-6 col-span-8 ">
           <Image alt="report" src="/emptychart.svg" height={172} width={104} />
           <div className="text-center">
             <p className="text-[14px] leading-[20px] max-w-[257px] text-[#060809]">
@@ -418,7 +383,7 @@ const Page = () => {
           </div>
         </div>
       ) : (
-        <div className="shadow-[0_0_0_1px_#E7E7E7]">
+        <div className="col-span-8 ">
           <div className="shadow-[0_0_0_1px_#E7E7E7] p-4 bg-white h-[74px] flex items-center justify-between">
             <div className="flex gap-x-2 items-center">
               <span>
@@ -437,9 +402,10 @@ const Page = () => {
             </div>
             <DotsThree size={32} />
           </div>
-          <div className="grid grid-cols-[1fr,auto]">
-            <div>
-              <div className="shadow-[0_0_0_1px_#E7E7E7] h-[578px] px-6 py-10 bg-white overflow-auto">
+          {/* message pane */}
+          <div className="grid grid-cols-8 w-full ">
+            <div className="col-span-full lg:col-span-6 ">
+              <div className="shadow-[0_0_0_1px_#E7E7E7] h-[75vh] px-6 py-10 bg-white overflow-auto ">
                 {userType === "manager" ? (
                   // message box
                   <>
@@ -507,7 +473,7 @@ const Page = () => {
                               </span>
                             </div>
                             <div className="flex flex-col rounded-[8px]">
-                              <span className="p-4 bg-[#FAFBFC] text-[#060809] rounded-[32px]">
+                              <span className="p-4 bg-[#FAFBFC] text-[#060809] text-opacity-80 text-sm rounded-[32px]">
                                 {message?.text}
                               </span>
                             </div>
@@ -550,8 +516,24 @@ const Page = () => {
                 )}
               </div>
               {/* textbox */}
+              {selectedFile && (
+                <div className="h-[40px] px-3 shadow-[0_0_0_1px_#E7E7E7] bg-white flex items-center justify-between">
+                  <p className="text-sm font-medium">
+                    Attached file: {selectedFile?.name}
+                  </p>
+                  <XCircle
+                    size={20}
+                    color="red"
+                    onClick={() => setSelectedFile(null)}
+                  />
+                </div>
+              )}
+
               <div className="h-[80px] shadow-[0_0_0_1px_#E7E7E7] bg-white pl-4 flex gap-x-2">
-                <label htmlFor="upload" className="cursor-pointer flex items-center justify-center">
+                <label
+                  htmlFor="upload"
+                  className="cursor-pointer flex items-center justify-center"
+                >
                   <Paperclip size={23} />
                   <input
                     id="upload"
@@ -561,11 +543,11 @@ const Page = () => {
                   />
                 </label>
                 <span className="self-center">{file?.ext}</span>
-              
+
                 <div className="h-[80px] bg-white p-3 w-full">
                   <div className="cursor-pointer rounded-[100px] p-4 relative border-[1px] border-[#ABAEB4]">
                     <button
-                      disabled={res.loading || isSending}
+                      disabled={conversationLoading || conversateLoading}
                       onClick={sendMessageHandler}
                       className="absolute right-2 top-2 w-[40px] h-[40px] rounded-full flex items-center justify-center bg-[#071A7E] "
                     >
@@ -583,21 +565,21 @@ const Page = () => {
               </div>
             </div>
             {userType === "manager" ? (
-              <div className="shadow-[0_0_0_1px_#E7E7E7] w-[272px] p-4 overflow-y-auto flex flex-col gap-y-2">
+              <div className="shadow-[0_0_0_1px_#E7E7E7] p-4 overflow-y-auto hidden lg:flex flex-col gap-y-2 col-span-2">
                 {filesreports?.length !== 0 ? (
                   filesreports?.map((item: any, i: number) => (
                     <FileReport item={item} key={i} />
                   ))
                 ) : (
-                  <div className="flex flex-col h-full items-center justify-center px-2 gap-y-6">
+                  <div className="flex flex-col h-full items-center justify-center px-2 gap-y-6 w-full  ">
                     <Image
                       alt="report"
                       src="/emptychart.svg"
                       height={172}
-                      width={104}
+                      width={80}
                     />
                     <div className="text-center">
-                      <p className="text-[14px] leading-[20px] max-w-[257px] text-[#060809]">
+                      <p className="text-[10px] xl:text-sm leading-[20px]  text-[#060809]">
                         You can view all reports your account manager sends you
                         here
                       </p>
@@ -663,3 +645,7 @@ export default Page;
                     </div>
                   </div> */
 }
+
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+//   .eyJpZCI6IjY1NTMzMWRiY2Y2ZDFiZDU2OWVhODJmNiIsImlhdCI6MTcwMTk2MjMwMiwiZXhwIjoxNzAyMDQ4NzAyLCJpc3MiOiJBY2NvdW50YWJsZSJ9
+//   .jOQMsLFXiTHT40vDeSY9hegZdXOurL - MybG0vuYBkDs;

@@ -38,39 +38,28 @@ const Page = () => {
     variables: {
       input: { limit: 10 },
     },
+    onCompleted(data) {
+        setServices(data?.getServices?.data);
+    },
+    onError(err) {
+      console.log(err);
+      toast.error(err.message);
+    }
   });
 
   const { data, loading } = useQuery(GET_SUBSCRIPTIONS, {
     variables: {
       input: { limit: 10 },
     },
+    onCompleted(data) {
+        setSubscriptions(data?.getSuscriptions?.data);
+    },
+    onError(err) {
+      console.log(err);
+      toast.error(err.message);
+    }
   });
 
-  useEffect(() => {
-    // console.log(data);
-
-    if (data?.getSuscriptions?.code) {
-      //
-      toast.error(data?.getSuscriptions?.message);
-    } else if (data?.getSuscriptions?.data) {
-      console.log(data?.getSuscriptions?.data);
-
-      setSubscriptions(data?.getSuscriptions?.data);
-    }
-  }, [data]);
-
-  // const router = useRouter();
-
-  useEffect(() => {
-    if (res.data?.getServices?.code) {
-      //
-      toast.error(res.data?.getServices?.message);
-    } else if (res.data?.getServices?.data) {
-      console.log(res.data?.getServices?.data);
-
-      setServices(res.data?.getServices?.data);
-    }
-  }, [res.data]);
 
     if (loading || res.loading)
       return (
@@ -96,7 +85,7 @@ const Page = () => {
         {subscriptions?.length > 0 && (
           <div className="flex justify-between items-center">Paid Services</div>
         )}
-        <div className="mt-3 grid grid-cols-3 gap-6">
+        <div className="mt-3 grid grid-cols-3 gap-3 lg:gap-6">
           {subscriptions?.length > 0
             ? subscriptions.map((subscription: any, i: number) => {
                 return <PaidServiceCard key={i} item={{ ...subscription }} />;
@@ -147,11 +136,7 @@ const Page = () => {
                 );
               })
             : null}
-          {/* <ServiceCard
-            icon={<ChartLineUp size={20} />}
-            name="Process Improvement"
-            price="₦26,000.00 / month"
-          /> */}
+          
         </div>
       </div>
       {chooseService && (
