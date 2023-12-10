@@ -297,6 +297,10 @@ const Page = () => {
     (participant: any) => participant?.email !== user?.email
   );
 
+  const handleContentChange = (event: React.ChangeEvent<HTMLDivElement>) => {
+    setText(event.currentTarget.textContent || "");
+  };
+
   return (
     <div className="h-full  grid grid-cols-10 w-full  ">
       {/* pane 1 */}
@@ -402,10 +406,12 @@ const Page = () => {
             </div>
             <DotsThree size={32} />
           </div>
+
           {/* message pane */}
           <div className="grid grid-cols-8 w-full ">
             <div className="col-span-full lg:col-span-6 ">
               <div className="shadow-[0_0_0_1px_#E7E7E7] h-[75vh] px-6 py-10 bg-white overflow-auto ">
+
                 {userType === "manager" ? (
                   // message box
                   <>
@@ -554,8 +560,14 @@ const Page = () => {
                       <PaperPlaneRight size={23} color="white" />
                     </button>
 
-                    <input
+                    {/* <input
                       className="bg-transparent outline-none placeholder:text-[#9597A0] w-full"
+                      placeholder="Message your Accountable officer..."
+                      value={text}
+                      onChange={(e) => setText(e.target.value)}
+                    /> */}
+                    <textarea
+                      className="bg-transparent outline-none placeholder:text-[#9597A0] w-full h-[20px] overflow-y-auto"
                       placeholder="Message your Accountable officer..."
                       value={text}
                       onChange={(e) => setText(e.target.value)}
