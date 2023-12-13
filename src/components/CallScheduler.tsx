@@ -200,23 +200,33 @@ const CallScheduler: FC<CallSchedulerProps> = ({ onClose, successHandler }) => {
           // <GoogleCalendarButton />
         )}
         {scheduleCall && (
-          <Portal
-            onClose={() => {
-              setScheduleCall(false);
-              setScheduleCallSuccess(true);
-            }}
-          >
-            <MeetingScheduler
-            // onCancel={() => {
-            //   setScheduleCall(false);
-            //   onClose();
-            // }}
-            // onSubmitCallback={() => {
-            //   setScheduleCall(false);
-            //   setScheduleCallSuccess(true);
-            // }}
-            />
-          </Portal>
+          <MeetingScheduler
+          // onCancel={() => {
+          //   setScheduleCall(false);
+          //   onClose();
+          // }}
+          // onSubmitCallback={() => {
+          //   setScheduleCall(false);
+          //   setScheduleCallSuccess(true);
+          // }}
+          />
+          // <Portal
+          //   onClose={() => {
+          //     setScheduleCall(false);
+          //     // setScheduleCallSuccess(true);
+          //   }}
+          // >
+          //   <MeetingScheduler
+          //   // onCancel={() => {
+          //   //   setScheduleCall(false);
+          //   //   onClose();
+          //   // }}
+          //   // onSubmitCallback={() => {
+          //   //   setScheduleCall(false);
+          //   //   setScheduleCallSuccess(true);
+          //   // }}
+          //   />
+          // </Portal>
         )}
 
         {scheduleCallSuccess && (
