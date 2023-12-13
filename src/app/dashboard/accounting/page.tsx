@@ -175,7 +175,7 @@ const Page = () => {
     <>
       {!trialBalance && !loading ? (
         <>
-          {isLinkedAccounts ? (
+          {!isLinkedAccounts ? (
             <>
               <h3 className="font-extrabold text-[28px] leading-[41px] text-[#060809]">
                 Accounting

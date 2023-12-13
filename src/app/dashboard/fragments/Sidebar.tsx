@@ -60,7 +60,7 @@ const Sidebar = ({ showNav,setShowNav }: { showNav: boolean, setShowNav: (showNa
   
   return (
     <div
-      className={`min-w-[212px] lg:min-w-[180px] xl:min-w-[212px] 2xl:w-[250px] px-4 h-screen border-r-[1px] border-[#E6E6E6] bg-white z-50 absolute lg:static ${
+      className={`min-w-[212px] lg:min-w-[180px] xl:min-w-[212px] 2xl:w-[250px] px-4 h-screen border-r-[1px] border-[#E6E6E6] bg-white z-50 transition-all duration-300 absolute lg:static ${
         showNav ? "block " : "hidden lg:block"
       }`}
     >

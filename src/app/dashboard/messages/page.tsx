@@ -297,6 +297,7 @@ const Page = () => {
     (participant: any) => participant?.email !== user?.email
   );
 
+
   return (
     <div className="h-full  grid grid-cols-10 w-full  ">
       {/* pane 1 */}
